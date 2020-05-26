@@ -1,0 +1,412 @@
+<form action="{{ route('position.store') }}" method="POST">
+                    @csrf
+                    <h5><b>Position Details</small></b></h5>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label for="">Client *</label>
+                                <select name="clientId" id="clientId" class="form-control" required>
+                                    <option value="">Select Client</option>
+                                    @foreach ($clients as $item)
+                                    <option value="{{ $item->id }}">{{ $item->clientName }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        {{-- <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="">Position Zone*</label>
+                                <select name="positionZoneId" id="positionZoneId" class="form-control" required>
+                                    <option value="">Select Position Zone</option>
+                                    @foreach ($zones as $item)
+                                    <option value="{{ $item->id }}">{{ $item->zoneName }}</option>
+                        @endforeach
+                        </select>
+                    </div>
+            </div> --}}
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label for="">Position State*</label>
+                    <select name="positionState" id="positionState" onchange="getCity();" class="form-control" required>
+                        <option value="">Select Position State</option>
+                        @foreach ($state as $item)
+                        <option value="{{ $item->id }}">{{ $item->state_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label for="">Position City*</label>
+                    <select name="positionCity" id="positionCity" class="form-control" required>
+                        <option value="">Select Position City</option>
+                        @foreach ($city as $item)
+                        <option value="{{ $item->id }}">{{ $item->city_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label for="">Position Name *</label>
+                    <input type="text" class="form-control" name="positionName" placeholder="Client Address" required>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">Close By Date *</label>
+                    <input type="text" id="datePicker" class="form-control datepicker" autocomplete="off"
+                        name="closeDate" placeholder="Close Date" required>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">No Of Openings *</label>
+                    <input type="text" class="form-control numberOnly" name="openings" placeholder="Number of Openings"
+                        required>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">Location *</label>
+                    {{-- <input type="text" class="form-control" name="location" placeholder="Location" required> --}}
+                    <select class="form-control js-example-tokenizer" name="locations[]" multiple="multiple" required>
+
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">Skill set *</label>
+                    <select class="form-control js-example-tokenizer" name="skillSet[]" multiple="multiple" required>
+
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="">Job Description *</label>
+                    <textarea name="job_description" class="form-control" id="job_description" cols="5" rows="5"
+                        required></textarea>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="">Min Experience Range *</label>
+                    {{-- <input type="text" placeholder="Year" class="form-control" autocomplete="off"
+                                name="minYearExp"> --}}
+
+                    <select name="minYearExp" id="minYearExp" class="form-control">
+
+                        @for($i=0; $i<=15; $i++) <option value="{{ $i }}">{{ $i }}</option>
+                            @endfor
+                    </select>
+
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="">Max Experience Range *</label>
+                    {{-- <input type="text" placeholder="Year" class="form-control" autocomplete="off"
+                                name="maxYearExp"> --}}
+                    <select name="maxYearExp" id="maxYearExp" class="form-control">
+
+                        @for($i=0; $i<=30; $i++) <option value="{{ $i }}">{{ $i }}</option>
+                            @endfor
+                    </select>
+
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="">Educational Qualification *</label>
+                    <select class="form-control js-example-tokenizer" name="eduQualification[]" multiple="multiple">
+
+                        <option> Any Graduate</option>
+                        <option> Bachelor of Agriculture (B.Sc. (Agriculture))</option>
+                        <option> Bachelor of Architecture (B.Arch.)</option>
+                        <option> Bachelor of Arts (B.A.)</option>
+                        <option> Bachelor of Ayurvedic Medicine &amp; Surgery (B.A.M.S.)</option>
+                        <option> Bachelor of Business Administration (B.B.A.)</option>
+                        <option>Bachelor of Commerce (B.Com.)</option>
+                        <option> Bachelor of Computer Applications (B.C.A.)</option>
+                        <option> Bachelor of Computer Science (B.Sc. (Computer Science))</option>
+                        <option> Bachelor of Dental Surgery (B.D.S.)</option>
+                        <option> Bachelor of Design (B.Des. - B.D.)</option>
+                        <option> Bachelor of Education (B.Ed.)</option>
+                        <option> Bachelor of Engineering - Bachelor of Technology (B.E./B.Tech.)</option>
+                        <option> Bachelor of Fine Arts (BFA - BVA)</option>
+                        <option> Bachelor of Fisheries Science (B.F.Sc. - B.Sc. (Fisheries))</option>
+                        <option> Bachelor of Home Science (B.A. - B.Sc. (Home Science))</option>
+                        <option> Bachelor of Homeopathic Medicine and Surgery (B.H.M.S.)</option>
+                        <option> Bachelor of Laws (L.L.B.)</option>
+                        <option> Bachelor of Library Science (B.Lib. - B.Lib.Sc.)</option>
+                        <option> Bachelor of Mass Communications (B.M.C. - B.M.M.)</option>
+                        <option> Bachelor of Medicine and Bachelor of Surgery (M.B.B.S.)</option>
+                        <option> Bachelor of Nursing (B.Sc. (Nursing))</option>
+                        <option> Bachelor of Pharmacy (B.Pharm.)</option>
+                        <option> Bachelor of Physical Education (B.P.Ed.)</option>
+                        <option> Bachelor of Physiotherapy (B.P.T.)</option>
+                        <option> Bachelor of Science (B.Sc.)</option>
+                        <option> Bachelor of Social Work (BSW or B.A. (SW))</option>
+                        <option> Bachelor of Veterinary Science &amp; Animal Husbandry (B.V.Sc.)
+                        <option>
+                        <option>Doctor of Medicine in Homoeopathy (M.D. (Homoeopathy))</option>
+                        <option>Master in Home Science (M.A. - M.Sc. (Home Science))</option>
+                        <option>Master of Architecture (M.Arch.)</option>
+                        <option>Master of Arts (M.A.)</option>
+                        <option>Master of Business Administration (M.B.A.)</option>
+                        <option>Master of Chirurgiae (M.Ch.)</option>
+                        <option>Master of Commerce (M.Com.)</option>
+                        <option>Master of Computer Applications (M.C.A.)</option>
+                        <option>Master of Dental Surgery (M.D.S.)</option>
+                        <option>Master of Design (M.Des. - M.Design.)</option>
+                        <option>Master of Education (M.Ed.)</option>
+                        <option>Master of Engineering - Master of Technology (M.E./M.Tech.)</option>
+                        <option>Master of Fine Arts (MFA - MVA)</option>
+                        <option>Master of Fishery Science (M.F.Sc. - M.Sc. (Fisheries))</option>
+                        <option>Master of Laws (L.L.M.)</option>
+                        <option>Master of Library Science (M.Lib. - M.Lib.Sc.)</option>
+                        <option>Master of Mass Communications (M.M.C - M.M.M.)</option>
+                        <option>Master of Pharmacy (M.Pharm)</option>
+                        <option>Master of Philosophy (M.Phil.)</option>
+                        <option>Master of Physical Education (M.P.Ed. - M.P.E.)</option>
+                        <option>Master of Physiotherapy (M.P.T.)</option>
+                        <option>Master of Science (M.Sc.)</option>
+                        <option>Master of Science in Agriculture (M.Sc. (Agriculture))</option>
+                        <option>Master of Social Work (M.S.W. or M.A. (SW))</option>
+                        <option>Master of Surgery (M.S.)</option>
+                        <option>Master of Veterinary Science (M.V.Sc.)</option>
+
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="">Min Salary Range (INR) *</label>
+
+                    <select name="minSalary" id="minSalary" class="form-control">
+                        <option>0</option>
+                        {{-- @for($i = 1; $i < 50; $i++)
+                                        <option value="{{  $i.'00000' }}" disabled>{{ $i }} Lacs</option>
+                        @endfor --}}
+
+                    </select>
+
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="">Max Salary Range (INR) *</label>
+                    {{-- <input type="text" placeholder="Salary" class="form-control numberOnly"
+                                    autocomplete="off" name="maxSalary"> --}}
+
+                    <select name="maxSalary" id="maxSalary" class="form-control">
+                        <option>1</option>
+                        {{-- @for($i = 1; $i <= 50; $i++)
+                                            <option value="{{  $i.'00000' }}" disabled>{{ $i }} Lacs</option>
+                        @endfor --}}
+
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="">Job Type </label>
+                    <select class="form-control" name="jobType">
+                        <option value="Full Time">Full Time</option>
+                        <option value="Part Time">Part Time</option>
+                        <option value="Temporary">Temporary</option>
+                        <option value="Contract">Contract</option>
+                        <option value="Internship">Internship</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="">Industry</label>
+                    <select class="form-control" name="industry" id="industry">
+                        <option value="">Select</option>
+                        <option value="IT-Software / Software Services">IT-Software / Software Services
+                        </option>
+                        <option value="BPO / Call Centre / ITES">BPO / Call Centre / ITES
+                        </option>
+
+                        <option value="Automotive / Auto Ancillary / Auto Components">
+                            Automotive / Auto Ancillary / Auto Components</option>
+
+                        <option value="Accounting / Finance">Accounting / Finance
+                        </option>
+                        <option value="Advertising / PR / MR / Event Management">
+                            Advertising / PR / MR / Event Management</option>
+
+                        <option value="Agriculture / Diary">Agriculture / Diary
+                        </option>
+
+                        <option value="Airlines">Airlines</option>
+                        <option value="Animation / Gaming">Animation / Gaming
+                        </option>
+
+                        <option value="Architecture / Interior Design">
+                            Architecture /
+                            Interior Design</option>
+                        <option value="Aviation / Aerospace">Aviation / Aerospace
+                        </option>
+                        <option value="Banking / Financial Services / Broking">Banking /
+                            Financial Services / Broking</option>
+                        <option value="Brewery / Distillery">Brewery / Distillery
+                        </option>
+                        <option value="Broadcasting">Broadcasting</option>
+
+                        <option value="Ceramics / Sanitary ware">Ceramics /
+                            Sanitary
+                            ware</option>
+                        <option value="Chemicals / Petro Chemicals / Plastics / Rubber">Chemicals / Petro
+                            Chemicals
+                            / Plastics / Rubber</option>
+                        <option value="Construction / Engineering / Cement / Metals">Construction /
+                            Engineering
+                            /
+                            Cement / Metals</option>
+                        <option value="Consumer Electronics / Appliances / Durables">Consumer Electronics /
+                            Appliances / Durables</option>
+                        <option value="Courier / Transportation / Freight / Warehousing">Courier /
+                            Transportation /
+                            Freight / Warehousing</option>
+                        <option value="Education / Teaching / Training">
+                            Education /
+                            Teaching / Training</option>
+                        <option value="Electricals /  Switchgears">
+                            Electricals /
+                            Switchgears</option>
+                        <optionvalue="Export / Import">Export / Import</option>
+
+                            <option value="Glass/ Glassware">Glass/ Glassware</option>
+
+                            <option value="Facility Management">Facility Management
+                            </option>
+
+                            <option value="Fertilizers / Pesticides">Fertilizers /
+                                Pesticides</option>
+                            <option value="FMCG / Food / Beverages">FMCG / Food /
+                                Beverages
+                            </option>
+                            <option value="Food Processing">Food Processing</option>
+
+                            <option value="Gems / Jewelry">Gems / Jewelry</option>
+
+                            <option value="Government / Defence">Government / Defence
+                            </option>
+                            <option value="Heat Ventilation / Air Conditioning">
+                                Heat
+                                Ventilation / Air Conditioning</option>
+                            <option value="Industrial Products / Heavy Machinery">Industrial
+                                Products / Heavy Machinery</option>
+                            <option value="Insurance">Insurance</option>
+
+                            <option value="Iron &amp; Steel">Iron &amp; Steel</option>
+
+                            <option value="IT - Hardware &amp; Networking">IT -
+                                Hardware
+                                &amp; Networking</option>
+                            <option KPO_ResearchAnalysis" value="KPO / Research Analysis">KPO / Research
+                                Analysis
+                            </option>
+                            <option value="Legal">Legal</option>
+                            <option value="Media / Entertainment / Internet">Media /
+                                Entertainment / Internet</option>
+                            <option value="Internet / E-commerce">Internet /
+                                E-commerce
+                            </option>
+                            <option value="Leather / Medical / Hospitals">
+                                Leather / Medical
+                                / Hospitals</option>
+                            <option value="Medical Devices / Equipment">Medical
+                                Devices /
+                                Equipment</option>
+                            <option value="Mining / Quarrying">Mining / Quarrying
+                            </option>
+
+                            <option value="NGO / Social Service / Regulators / Industry Associations">NGO /
+                                Social
+                                Service / Regulators / Industry Associations</option>
+
+                            <option value="Office Equipment / Automation">
+                                Office Equipment /
+                                Automation</option>
+                            <option value="Oil &amp; Gas / Energy / Power Infrastructure">
+                                Oil &amp; Gas / Energy / Power Infrastructure</option>
+
+                            <option value="Pulp &amp; Paper">Pulp &amp; Paper</option>
+
+                            <option value="Pharma / Biotech / Clinical Research">
+                                Pharma /
+                                Biotech / Clinical Research</option>
+                            <option value="Printing / Packaging">Printing / Packaging
+                            </option>
+                            <option value="Publishing">Publishing</option>
+
+                            <option value="Real Estate / Property">Real Estate /
+                                Property
+                            </option>
+                            <option value="Recruitment / Staffing">Recruitment /
+                                Staffing
+                            </option>
+                            <option value="Retail/Wholesale">Retail/Wholesale</option>
+
+                            <option value="Security / Law Enforcement">Security / Law Enforcement</option>
+                            <option value="Semiconductors/Electronics">
+                                Semiconductors/Electronics</option>
+                            <option Shipping_Marine" value="Shipping/Marine">Shipping/Marine</option>
+
+                            <option value="Strategy/	Management Consulting">
+                                Strategy/
+                                Management Consulting</option>
+                            <option value="Sugar">Sugar</option>
+                            <option value="Telecom/ISP">Telecom/ISP</option>
+
+                            <option value="Textiles/Garments/Accessories">
+                                Textiles/Garments/Accessories</option>
+                            <option value="Travel/Hotels/Restaurants">
+                                Travel/Hotels/Restaurants</option>
+                            <option value="Tyres">Tyres</option>
+                            <option value="Water Treatment / Waste Management">Water
+                                Treatment / Waste Management</option>
+                            <option value="Wellness/Fitness/Sports/Beauty">
+                                Wellness/Fitness/Sports/Beauty</option>
+                            <option value="Others">Others</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <label for="">Level</label>
+                <select name="level" id="level" class="form-control">
+                    <option>00 - 05 ( Junior )</option>
+                    <option>05 - 15 ( Middle )</option>
+                    <option>15 - 25 ( Senior )</option>
+                    <option>More Than 25 ( Primium )</option>
+                </select>
+            </div>
+            <div class="col-sm-4">
+                <label for="">Gender</label>
+                <select name="gender" id="gender" class="form-control">
+                    <option>Male And Female</option>
+                    <option>Male Only</option>
+                    <option>Female Only</option>
+                </select>
+            </div>
+
+
+
+            <div class="col-sm-6 offset-3">
+                <p></p>
+                <div class="form-group">
+                    <button class="btn btn-primary btn-block" type="submit">Create Position</button>
+                </div>
+            </div>
+        </div>
+        </form>

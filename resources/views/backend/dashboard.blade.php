@@ -1,0 +1,298 @@
+@extends('backend.master')
+@section('title', 'Publisher Admin Dashboard')
+@section('body')
+
+<div class="page-body">
+
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="page-header-left">
+                        <h3>Dashboard
+                            <small>Publisher Admin panel</small>
+                        </h3>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <ol class="breadcrumb pull-right">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url('home') }}">
+                                <i data-feather="home"></i>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active">Dashboard</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Container-fluid Ends-->
+
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-3 col-md-6 xl-50">
+                <div class="card o-hidden widget-cards">
+                    <div class="bg-warning card-body">
+                        <div class="media static-top-widget row">
+                            <div class="icons-widgets col-4">
+                                <div class="align-self-center text-center"><i data-feather="navigation" class="font-warning"></i></div>
+                            </div>
+                            <div class="media-body col-8"><span class="m-0">Earnings</span>
+                                <h3 class="mb-0">$ <span class="counter">6659</span><small> This Month</small></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 xl-50">
+                <div class="card o-hidden  widget-cards">
+                    <div class="bg-secondary card-body">
+                        <div class="media static-top-widget row">
+                            <div class="icons-widgets col-4">
+                                <div class="align-self-center text-center"><i data-feather="box" class="font-secondary"></i></div>
+                            </div>
+                            <div class="media-body col-8"><span class="m-0">Products</span>
+                                <h3 class="mb-0">$ <span class="counter">9856</span><small> This Month</small></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 xl-50">
+                <div class="card o-hidden widget-cards">
+                    <div class="bg-primary card-body">
+                        <div class="media static-top-widget row">
+                            <div class="icons-widgets col-4">
+                                <div class="align-self-center text-center"><i data-feather="message-square" class="font-primary"></i></div>
+                            </div>
+                            <div class="media-body col-8"><span class="m-0">Messages</span>
+                                <h3 class="mb-0">$ <span class="counter">893</span><small> This Month</small></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 xl-50">
+                <div class="card o-hidden widget-cards">
+                    <div class="bg-danger card-body">
+                        <div class="media static-top-widget row">
+                            <div class="icons-widgets col-4">
+                                <div class="align-self-center text-center"><i data-feather="users" class="font-danger"></i></div>
+                            </div>
+                            <div class="media-body col-8"><span class="m-0">New Vendors</span>
+                                <h3 class="mb-0">$ <span class="counter">45631</span><small> This Month</small></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-6 xl-100">
+                <div class="card height-equal">
+                    <div class="card-header">
+                        <h5>Empolyee Status</h5>
+                        <div class="card-header-right">
+                            <ul class="list-unstyled card-option">
+                                <li><i class="icofont icofont-simple-left"></i></li>
+                                <li><i class="view-html fa fa-code"></i></li>
+                                <li><i class="icofont icofont-maximize full-card"></i></li>
+                                <li><i class="icofont icofont-minus minimize-card"></i></li>
+                                <li><i class="icofont icofont-refresh reload-card"></i></li>
+                                <li><i class="icofont icofont-error close-card"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="user-status table-responsive products-table">
+                            <table class="table table-bordernone mb-0">
+                                <thead>
+                                    <tr>
+                                        <!-- <th scope="col">Name</th>
+                                        <th scope="col">Designation</th>
+                                        <th scope="col">Skill Level</th>
+                                        <th scope="col">Experience</th> -->
+                                        <th scope="col">Action</th>
+                                        <th>S.No</th>
+                                        <th scope="col">Client</th>
+                                        <th scope="col">State</th>
+                                        <th scope="col">City</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Close Date</th>
+                                        <th scope="col">Openings</th>
+                                        <th scope="col">Location</th>
+                                        <th scope="col">Skill</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Min. Year Exp</th>
+                                        <th scope="col">Max. Year Exp</th>
+                                        <th scope="col">Education Qualification</th>
+                                        <th scope="col">Min. Salary</th>
+                                        <th scope="col">Max. Salary</th>
+                                        <th scope="col">Job Type</th>
+                                        <th scope="col">Industry</th>
+                                        <th scope="col">Level</th>
+                                        <th scope="col">Gender</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @if(count($jobPositions))
+                                    @foreach($jobPositions as $key=>$jobPosition)
+                                    <tr>
+                                        <td>
+                                            <a href="{{ url('position/').'/'.$jobPosition->id }}" class="btn btn-sm btn-info">
+                                                Post Now
+                                            </a>
+                                        </td>
+                                        <td>{{ ++$key }}</td>
+                                        <td>{{ $jobPosition->clientId }}</td>
+                                        <td>{{ $jobPosition->positionState }}</td>
+                                        <td>{{ $jobPosition->positionCity }}</td>
+                                        <td>{{ $jobPosition->positionName }}</td>
+                                        <td>{{ $jobPosition->closeDate }}</td>
+                                        <td>{{ $jobPosition->openings }}</td>
+                                        <td>{{ $jobPosition->location }}</td>
+                                        <td>{{ $jobPosition->skillSet }}</td>
+                                        <td>{{ $jobPosition->job_description }}</td>
+                                        <td>{{ $jobPosition->minYearExp }}</td>
+                                        <td>{{ $jobPosition->maxYearExp }}</td>
+                                        <td>{{ $jobPosition->eduQualification }}</td>
+                                        <td>{{ $jobPosition->minSalary }}</td>
+                                        <td>{{ $jobPosition->maxSalary }}</td>
+                                        <td>{{ $jobPosition->jobType }}</td>
+                                        <td>{{ $jobPosition->industry }}</td>
+                                        <td>{{ $jobPosition->level }}</td>
+                                        <td>{{ $jobPosition->gender }}</td>
+                                    </tr>
+                                    @endforeach
+                                    @endif
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="code-box-copy">
+                            <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#example-head5" title="" data-original-title="Copy"><i class="icofont icofont-copy-alt"></i></button>
+                            <pre class=" language-html"><code class=" language-html" id="example-head5">
+&lt;div class="user-status table-responsive products-table"&gt;
+&lt;table class="table table-bordernone mb-0"&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th scope="col"&gt;Name&lt;/th&gt;
+            &lt;th scope="col"&gt;Designation&lt;/th&gt;
+            &lt;th scope="col"&gt;Skill Level&lt;/th&gt;
+            &lt;th scope="col"&gt;Experience&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+            &lt;tr&gt;
+                &lt;td class="bd-t-none u-s-tb"&gt;
+                    &lt;div class="align-middle image-sm-size"&gt;&lt;img class="img-radius align-top m-r-15 rounded-circle blur-up lazyloaded" src="../assets/images/dashboard/user2.jpg" alt="" data-original-title="" title=""&gt;
+                    &lt;div class="d-inline-block"&gt;
+                    &lt;h6&gt;John Deo &lt;span class="text-muted digits"&gt;(14+ Online)&lt;/span&gt;&lt;/h6&gt;
+                    &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/td&gt;
+                &lt;td&gt;Designer&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;div class="progress-showcase"&gt;
+                    &lt;div class="progress" style="height: 8px;"&gt;
+                    &lt;div class="progress-bar bg-primary" role="progressbar" style="width: 30%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"&gt;&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/td&gt;
+                &lt;td class="digits"&gt;2 Year&lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td class="bd-t-none u-s-tb"&gt;
+                &lt;div class="align-middle image-sm-size"&gt;&lt;img class="img-radius align-top m-r-15 rounded-circle blur-up lazyloaded" src="../assets/images/dashboard/user1.jpg" alt="" data-original-title="" title=""&gt;
+                &lt;div class="d-inline-block"&gt;
+                &lt;h6&gt;Holio Mako &lt;span class="text-muted digits"&gt;(250+ Online)&lt;/span&gt;&lt;/h6&gt;
+                &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/td&gt;
+            &lt;td&gt;Developer&lt;/td&gt;
+            &lt;td&gt;
+                &lt;div class="progress-showcase"&gt;
+                &lt;div class="progress" style="height: 8px;"&gt;
+                &lt;div class="progress-bar bg-secondary" role="progressbar" style="width: 70%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"&gt;&lt;/div&gt;
+                &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/td&gt;
+            &lt;td class="digits"&gt;3 Year&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td class="bd-t-none u-s-tb"&gt;
+                &lt;div class="align-middle image-sm-size"&gt;&lt;img class="img-radius align-top m-r-15 rounded-circle blur-up lazyloaded" src="../assets/images/dashboard/man.png" alt="" data-original-title="" title=""&gt;
+                &lt;div class="d-inline-block"&gt;
+                &lt;h6&gt;Mohsib lara&lt;span class="text-muted digits"&gt;(99+ Online)&lt;/span&gt;&lt;/h6&gt;
+                &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/td&gt;
+            &lt;td&gt;Tester&lt;/td&gt;
+            &lt;td&gt;
+                &lt;div class="progress-showcase"&gt;
+                &lt;div class="progress" style="height: 8px;"&gt;
+                &lt;div class="progress-bar bg-primary" role="progressbar" style="width: 60%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"&gt;&lt;/div&gt;
+                &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/td&gt;
+            &lt;td class="digits"&gt;5 Month&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td class="bd-t-none u-s-tb"&gt;
+                &lt;div class="align-middle image-sm-size"&gt;&lt;img class="img-radius align-top m-r-15 rounded-circle blur-up lazyloaded" src="../assets/images/dashboard/user.png" alt="" data-original-title="" title=""&gt;
+                &lt;div class="d-inline-block"&gt;
+                &lt;h6&gt;Hileri Soli &lt;span class="text-muted digits"&gt;(150+ Online)&lt;/span&gt;&lt;/h6&gt;
+                &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/td&gt;
+            &lt;td&gt;Designer&lt;/td&gt;
+            &lt;td&gt;
+                &lt;div class="progress-showcase"&gt;
+                &lt;div class="progress" style="height: 8px;"&gt;
+                &lt;div class="progress-bar bg-secondary" role="progressbar" style="width: 30%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"&gt;&lt;/div&gt;
+                &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/td&gt;
+            &lt;td class="digits"&gt;3 Month&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td class="bd-t-none u-s-tb"&gt;
+                &lt;div class="align-middle image-sm-size"&gt;&lt;img class="img-radius align-top m-r-15 rounded-circle blur-up lazyloaded" src="../assets/images/dashboard/designer.jpg" alt="" data-original-title="" title=""&gt;
+                &lt;div class="d-inline-block"&gt;
+                &lt;h6&gt;Pusiz bia &lt;span class="text-muted digits"&gt;(14+ Online)&lt;/span&gt;&lt;/h6&gt;
+                &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/td&gt;
+            &lt;td&gt;Designer&lt;/td&gt;
+            &lt;td&gt;
+                &lt;div class="progress-showcase"&gt;
+                &lt;div class="progress" style="height: 8px;"&gt;
+                &lt;div class="progress-bar bg-primary" role="progressbar" style="width: 90%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"&gt;&lt;/div&gt;
+                &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/td&gt;
+            &lt;td class="digits"&gt;5 Year&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+                                </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Container-fluid Ends-->
+
+        </div>
+
+        <!-- footer start-->
+        @include('backend.common.footer')
+        <!-- footer end-->
+    </div>
+
+</div>
+
+@endsection
