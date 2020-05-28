@@ -130,16 +130,12 @@
                                         <th scope="col">Education Qualification</th>
                                         <th scope="col">Min. Salary</th>
                                         <th scope="col">Max. Salary</th>
-                                        <th scope="col">Job Type</th>
-                                        <th scope="col">Industry</th>
-                                        <th scope="col">Level</th>
-                                        <th scope="col">Gender</th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
-                                    @if(count($jobPositions))
-                                    @foreach($jobPositions as $key=>$jobPosition)
+                                    @if(count($jobs))
+                                    @foreach($jobs as $key=>$jobPosition)
                                     <tr>
                                         <td>
                                             <a href="{{ url('position/').'/'.$jobPosition->id }}" class="btn btn-sm btn-info">
@@ -147,24 +143,20 @@
                                             </a>
                                         </td>
                                         <td>{{ ++$key }}</td>
-                                        <td>{{ $jobPosition->clientId }}</td>
-                                        <td>{{ $jobPosition->positionState }}</td>
-                                        <td>{{ $jobPosition->positionCity }}</td>
-                                        <td>{{ $jobPosition->positionName }}</td>
-                                        <td>{{ $jobPosition->closeDate }}</td>
-                                        <td>{{ $jobPosition->openings }}</td>
-                                        <td>{{ $jobPosition->location }}</td>
-                                        <td>{{ $jobPosition->skillSet }}</td>
-                                        <td>{{ $jobPosition->job_description }}</td>
-                                        <td>{{ $jobPosition->minYearExp }}</td>
-                                        <td>{{ $jobPosition->maxYearExp }}</td>
-                                        <td>{{ $jobPosition->eduQualification }}</td>
-                                        <td>{{ $jobPosition->minSalary }}</td>
-                                        <td>{{ $jobPosition->maxSalary }}</td>
-                                        <td>{{ $jobPosition->jobType }}</td>
-                                        <td>{{ $jobPosition->industry }}</td>
-                                        <td>{{ $jobPosition->level }}</td>
-                                        <td>{{ $jobPosition->gender }}</td>
+                                        <td>{{ isset($jobPosition->company_id)?$jobPosition->company_id:'' }}</td>
+                                        <td>{{ isset($jobPosition->click_india_city->city_name)?$jobPosition->click_india_city->city_name:'' }}</td>
+                                        <td>{{ isset($jobPosition->job_title)?$jobPosition->job_title:'' }}</td>
+                                        <td>{{ Carbon\Carbon::parse($jobPosition->expire_on)->format('d-M-Y') }}</td>
+                                        <td>{{ isset($jobPosition->vacancies)?$jobPosition->vacancies:'' }}</td>
+                                        <td>{{ isset($jobPosition->company_location)?$jobPosition->company_location:'' }}</td>
+                                        <td>{{ isset($jobPosition->skills)?$jobPosition->skills:'' }}</td>
+                                        <td>{{ isset($jobPosition->job_description)?$jobPosition->job_description:'' }}</td>
+                                        <td>{{ isset($jobPosition->click_india_minimum_experience)?$jobPosition->click_india_minimum_experience:'' }}</td>
+                                        <td>{{ isset($jobPosition->click_india_minimum_qualification)?$jobPosition->click_india_minimum_qualification:'' }}</td>
+                                        <td>{{ isset($jobPosition->minimum_salary)?$jobPosition->minimum_salary:'' }}</td>
+                                        <td>{{ isset($jobPosition->maximum_salary)?$jobPosition->maximum_salary:'' }}</td>
+                                        <td>{{ isset($jobPosition->job_type)?$jobPosition->job_type:'' }}</td>
+                                        <td>{{ isset($jobPosition->gender)?$jobPosition->gender:'' }}</td>
                                     </tr>
                                     @endforeach
                                     @endif

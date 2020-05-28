@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Job;
 use App\JobPosition;
 use App\SocialCrendential;
 use Exception;
@@ -31,7 +32,8 @@ class HomeController extends Controller
     public function index()
     {
         $jobPositions = JobPosition::get();
-        return view('backend.dashboard', compact('jobPositions'));
+        $jobs = Job::get();
+        return view('backend.dashboard', compact('jobPositions', 'jobs'));
         return view('home');
     }
 

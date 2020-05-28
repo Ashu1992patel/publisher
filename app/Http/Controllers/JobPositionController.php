@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\ClickIndiaCity;
+use App\ClickIndiaJobCategory;
+use App\Company;
+use App\Job;
 use App\JobPosition;
 use App\SocialCrendential;
 use Carbon\Carbon;
@@ -19,7 +23,11 @@ class JobPositionController extends Controller
     public function index()
     {
         // return view('backend.client.clickindia');
-        return view('backend.jobs.job_post');
+        // return view('backend.jobs.job_post_gull');
+        $clickIndiaCity = ClickIndiaCity::get();
+        $clickIndiaJobCategory = ClickIndiaJobCategory::get();
+        $companies = Company::get();
+        return view('backend.jobs.job_post', compact('clickIndiaCity', 'clickIndiaJobCategory', 'companies'));
     }
 
     /**
@@ -40,73 +48,91 @@ class JobPositionController extends Controller
      */
     public function store(Request $request)
     {
-        dd($_REQUEST);
-        $eduQualification = '';
-        foreach ($request->eduQualification as $key => $value) {
+        // $eduQualification = '';
+        // foreach ($request->eduQualification as $key => $value) {
 
-            if (++$key == $request->eduQualification)
-                $eduQualification .= $value;
-            else
-                $eduQualification .= $value . ', ';
-        }
+        //     if (++$key == $request->eduQualification)
+        //         $eduQualification .= $value;
+        //     else
+        //         $eduQualification .= $value . ', ';
+        // }
+
+        // dd($_REQUEST);
+
+        // dd(json_encode(request('click_india_working_days')));
 
         $commonController = new CommonController();
 
-        $JobPosition = new JobPosition();
-        $JobPosition->clientId = request('clientId');
-        $JobPosition->positionState = request('positionState');
-        $JobPosition->positionCity = request('positionCity');
-        $JobPosition->positionName = request('positionName');
-        $JobPosition->closeDate = Carbon::parse(request('closeDate'))->format('Y-m-d 12:59:59');
-        $JobPosition->openings = request('openings');
-        $JobPosition->location = request('location');
-        $JobPosition->skillSet = request('skillSet');
-        $JobPosition->job_description = request('job_description');
-        $JobPosition->minYearExp = request('minYearExp');
-        $JobPosition->maxYearExp = request('maxYearExp');
-        $JobPosition->eduQualification = $eduQualification;
-        $JobPosition->minSalary = request('minSalary');
-        $JobPosition->maxSalary = request('maxSalary');
-        $JobPosition->jobType = request('jobType');
-        $JobPosition->industry = request('industry');
-        $JobPosition->level = request('level');
-        $JobPosition->gender = request('gender');
-        $JobPosition->save();
+        $job = new Job();
+        $job->job_title = request('job_title');
+        $job->designation = request('designation');
+        $job->expire_on = Carbon::parse(request('expire_on'))->format('Y-m-d');
+        // $job->expire_on = Carbon::parse('2021-01-31')->format('Y-m-d');
+        $job->job_type = request('job_type');
+        $job->vacancies = request('vacancies');
+        $job->salary_type = request('salary_type');
+        $job->minimum_salary = request('minimum_salary');
+        $job->maximum_salary = request('maximum_salary');
+        $job->job_description = request('job_description');
+        $job->company_id = request('company_id');
+        $job->company_url = request('company_url');
+        $job->company_location = request('company_location');
+        $job->apply_button_url = request('apply_button_url');
+        $job->other = request('other');
+        $job->skills = request('skills');
+        $job->company_description = request('company_description');
+        $job->click_india_job_category_id = request('click_india_job_category_id');
+        $job->click_india_city_id = request('click_india_city_id');
+        $job->click_india_minimum_qualification = request('click_india_minimum_qualification');
+        $job->click_india_minimum_experience = request('click_india_minimum_experience');
+        $job->click_india_working_days = json_encode(request('click_india_working_days'));
+        $job->click_india_required_candidate = request('click_india_required_candidate');
+        $job->click_india_hiring_process = request('click_india_hiring_process');
+        $job->is_active = request('is_active');
+        $job->save();
 
 
-        $click_india_job_status = $commonController->sendToClickIndia($JobPosition->id, 423, $eduQualification);
+        if (!is_null(request('clickindia'))) {
+            // dd($job->click_india_minimum_qualification);
+            $click_india_job_status = $commonController->sendToClickIndia($job->id);
 
-        dd($click_india_job_status);
-
-        $message = 'clientId: ' . $JobPosition->clientId . 'positionState: ' . $JobPosition->positionState . 'positionCity: ' . $JobPosition->positionCity . 'positionName: ' . $JobPosition->positionName . 'closeDate: ' . $JobPosition->closeDate . 'openings: ' . $JobPosition->openings . 'location: ' . $JobPosition->location . 'skillSet: ' . $JobPosition->skillSet . 'job_description: ' . $JobPosition->job_description . 'minYearExp: ' . $JobPosition->minYearExp . 'maxYearExp: ' . $JobPosition->maxYearExp . 'eduQualification: ' . $JobPosition->eduQualification . 'minSalary: ' . $JobPosition->minSalary . 'maxSalary: ' . $JobPosition->maxSalary . 'jobType: ' . $JobPosition->jobType . 'industry: ' . $JobPosition->industry . 'level: ' . $JobPosition->level . 'gender: ' . $JobPosition->gender;
-
-
-        $SocialCrendential = SocialCrendential::where('social_plateform_name', $value)->first();
-
-        try {
-            $client = new Client(['base_uri' => 'https://api.linkedin.com']);
-            $response = $client->request('GET', '/v2/me', [
-                'headers' => [
-                    "Authorization" => "Bearer " . $SocialCrendential->access_token,
-                ],
-            ]);
-
-            $data = json_decode($response->getBody()->getContents(), true);
-            $linkedin_profile_id = $data['id']; // store this id somewhere
-
-
-
-            $commonController->sendLinkedInPost($message, $SocialCrendential->access_token);
-
-            session()->put('linkedin_profile_id', $linkedin_profile_id);
-
-            return redirect('social-group')->with('success', 'LinkedIn message has been posted successfully !!');
-        } catch (Exception $e) {
-            // return redirect('social-group')->with('error', 'LinkedIn message can not be posted !!');
-            echo $e->getMessage();
+            // dd('CI Status: ' . $click_india_job_status);
         }
+        // dd(!is_null(request('linkedin')));
 
-        return redirect('position')->with('success', 'Job position has been saved & posted to linkedin successfully !!');
+        if (!is_null(request('linkedin'))) {
+            $message = 'Company Name: ' . $job->company->name . 'City: ' . $job->click_india_city->city_name . 'Position Name: ' . $job->designation . 'Job Expire Date: ' . $job->expire_on . 'openings: ' . $job->vacancies . 'Company Location: ' . $job->company_location . 'Required Skills: ' . $job->skills . 'Job Description: ' . $job->job_description . 'Min Experience: ' . $job->click_india_minimum_experience . 'Qualification: ' . $job->click_india_minimum_qualification . 'Min Salary: ' . $job->minimum_salary . 'Max Salary: ' . $job->maximum_salary . 'Job Type: ' . $job->job_type;
+
+            // dd($message);
+
+            $SocialCrendential = SocialCrendential::where('social_plateform_name', 'linkedin')->first();
+
+
+            try {
+                $client = new Client(['base_uri' => 'https://api.linkedin.com']);
+                $response = $client->request('GET', '/v2/me', [
+                    'headers' => [
+                        "Authorization" => "Bearer " . $SocialCrendential->access_token,
+                    ],
+                ]);
+
+                $data = json_decode($response->getBody()->getContents(), true);
+                $linkedin_profile_id = $data['id']; // store this id somewhere
+
+                $commonController->sendLinkedInPost($message, $SocialCrendential->access_token);
+
+                session()->put('linkedin_profile_id', $linkedin_profile_id);
+
+                dd(session('linkedin_profile_id'));
+                return redirect()->back()->with('success', 'LinkedIn message has been posted successfully !!');
+            } catch (Exception $e) {
+                // return redirect('social-group')->with('error', 'LinkedIn message can not be posted !!');
+                echo $e->getMessage();
+            }
+        }
+        dd('AP');
+
+        return redirect()->back()->with('success', 'Job position has been saved & posted to linkedin successfully !!');
     }
 
     /**
@@ -117,101 +143,64 @@ class JobPositionController extends Controller
      */
     public function show(JobPosition $jobPosition, $id)
     {
-        $JobPosition = JobPosition::find($id);
-        $position = JobPosition::find($id);
-        // dd($jobPosition);
-        try {
-            $client = new Client();
-            $url = "https://www.clickindia.com/cron/jobs_business_api.php";
+        // $JobPosition = JobPosition::find($id);
+        // $position = JobPosition::find($id);
+        $job = Job::find($id);
 
-            // dd($url);
-            $response = $client->put($url, [
-                'headers' => ['Content-type' => 'application/json'],
-                // 'auth' => [
-                //     'testing',
-                //     'testing123'
-                // ],
-                'json' => [
-                    'job_id' => $position->id,
-                    'job_title' => $position->positionName,
-                    'job_description' => $position->job_description,
-                    'job_category' => $position->job_category,
-                    'job_city' => $position->positionCity,
-                    // 'job_location' => $position->positionState,
-                    'job_location' => $position->location,
-                    'job_pref_loc' => $position->location,
-                    'qualification' => $position->eduQualification,
-                    'experience' => $position->minYearExp . '-' . $position->maxYearExp,
-                    'job_type' => $position->jobType,
-                    'payroll_type' => $position->payroll_type,
-                    'salary' => $position->minSalary . '-' . $position->maxSalary,
-                    'salary_type' => $position->salary_type,
-                    'designation' => $position->designation,
-                    'working_days' => $position->working_days,
-                    'gender' => $position->gender,
-                    'hiring_process' => $position->hiring_process,
-                    'vacancy' => $position->openings,
-                    'skills' => $position->skillSet,
-                    'languages' => $position->languages,
-                    'listing_url' => $position->listing_url,
-                    'company' => $position->company,
-                    // 'company_logo' => $company_logo_path,
-                    'company_website' => $position->company_website,
-                    'company_profile' => $position->company_profile,
-                    'other' => $position->other,
-                ],
-            ]);
-
-            if ($response->getBody()) {
-                $msg = " Click India Job Posted!! ";
-                dd($msg);
-                // return back()->with('success', 'Job position has been posted successfully !!');
-            } else {
-                $msg = " Click India Job Posting Error!! ";
-                // return back()->with('error', 'Job can not be posted to click india job board !!');
-            }
-        } catch (Exception $e) {
-            return back()->with('error', 'Job can not be posted to click india job board !!');
-        }
+        $commonController  = new CommonController();
+        $click_india_job_status = $commonController->sendToClickIndia($job->id);
 
         $message = '
-        Client: ' . $JobPosition->clientId . '
-        ';
-        $message .= 'State: ' . $JobPosition->positionState . '
-        ';
-        $message .= 'City: ' . $JobPosition->positionCity . '
-        ';
-        $message .= 'Position Name: ' . $JobPosition->positionName . '
-        ';
-        $message .= 'Close Date: ' . Carbon::parse(
-            $JobPosition->closeDate
-        )->format('d-m-Y') . ' ';
-        $message .= 'Openings: ' . $JobPosition->openings . '
-        ';
-        $message .= 'Location: ' . $JobPosition->location . '
-        ';
-        $message .= 'Skill Set: ' . $JobPosition->skillSet . '
-        ';
-        $message .= 'Min. Year Exp: ' . $JobPosition->minYearExp . '
-        ';
-        $message .= 'Max. Year Exp: ' . $JobPosition->maxYearExp . '
-        ';
-        $message .= 'Min. Salary: ' . $JobPosition->minSalary . '
-        ';
-        $message .= 'Max. Salary: ' . $JobPosition->maxSalary . '
-        ';
-        $message .= 'Job Type: ' . $JobPosition->jobType . '
-        ';
-        $message .= 'Industry: ' . $JobPosition->industry . '
-        ';
-        $message .= 'Level: ' . $JobPosition->level . '
-        ';
-        $message .= 'Gender Required: ' . $JobPosition->gender . '
-        ';
-        $message .= 'Job Description: ' . $JobPosition->job_description . '
-        ';
-        $message .= 'Education Qualification: ' . $JobPosition->eduQualification . '
-        ';
+        Company Name: ' . $job->company->name . '
+        City: ' . $job->click_india_city->city_name . '
+        Position Name: ' . $job->designation . '
+        Job Expire Date: ' . $job->expire_on . '
+        openings: ' . $job->vacancies . '
+        Company Location: ' . $job->company_location . '
+        Required Skills: ' . $job->skills . '
+        Job Description: ' . $job->job_description . '
+        Min Experience: ' . $job->click_india_minimum_experience . '
+        Max Salary: ' . $job->maximum_salary . '
+        Job Type: ' . $job->job_type;
+
+        // $message = '
+        // Client: ' . $JobPosition->clientId . '
+        // ';
+        // $message .= 'State: ' . $JobPosition->positionState . '
+        // ';
+        // $message .= 'City: ' . $JobPosition->positionCity . '
+        // ';
+        // $message .= 'Position Name: ' . $JobPosition->positionName . '
+        // ';
+        // $message .= 'Close Date: ' . Carbon::parse(
+        //     $JobPosition->closeDate
+        // )->format('d-m-Y') . ' ';
+        // $message .= 'Openings: ' . $JobPosition->openings . '
+        // ';
+        // $message .= 'Location: ' . $JobPosition->location . '
+        // ';
+        // $message .= 'Skill Set: ' . $JobPosition->skillSet . '
+        // ';
+        // $message .= 'Min. Year Exp: ' . $JobPosition->minYearExp . '
+        // ';
+        // $message .= 'Max. Year Exp: ' . $JobPosition->maxYearExp . '
+        // ';
+        // $message .= 'Min. Salary: ' . $JobPosition->minSalary . '
+        // ';
+        // $message .= 'Max. Salary: ' . $JobPosition->maxSalary . '
+        // ';
+        // $message .= 'Job Type: ' . $JobPosition->jobType . '
+        // ';
+        // $message .= 'Industry: ' . $JobPosition->industry . '
+        // ';
+        // $message .= 'Level: ' . $JobPosition->level . '
+        // ';
+        // $message .= 'Gender Required: ' . $JobPosition->gender . '
+        // ';
+        // $message .= 'Job Description: ' . $JobPosition->job_description . '
+        // ';
+        // $message .= 'Education Qualification: ' . $JobPosition->eduQualification . '
+        // ';
 
         $SocialCrendential = SocialCrendential::where('social_plateform_name', 'linkedin')->first();
 

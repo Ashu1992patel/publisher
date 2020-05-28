@@ -2,7 +2,7 @@
 @section('title', 'Job Post')
 @section('body')
 
-<style>
+{{-- <style>
     * {
         margin: 0;
         padding: 0
@@ -239,6 +239,51 @@
         width: 100%;
         object-fit: cover
     }
+</style> --}}
+
+
+<style>
+    /* Mark input boxes that gets an error on validation: */
+
+    /* Hide all steps by default: */
+    .tab {
+        display: none;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 17px;
+        font-family: Raleway;
+        cursor: pointer;
+    }
+
+    #prevBtn {
+        background-color: #bbbbbb;
+    }
+
+    /* Make circles that indicate the steps of the form: */
+    .step {
+        height: 15px;
+        width: 15px;
+        margin: 0 2px;
+        background-color: #bbbbbb;
+        border: none;
+        border-radius: 50%;
+        display: inline-block;
+        opacity: 0.5;
+    }
+
+    .step.active {
+        opacity: 1;
+    }
+
+    /* Mark the steps that are finished and valid: */
+    .step.finish {
+        background-color: #4CAF50;
+    }
 </style>
 
 <div class="page-body">
@@ -279,350 +324,358 @@
                         <h5>Job Post</h5>
                     </div> -->
                     <div class="card-body">
-                        <div class="row product-adding">
-                            <!-- MultiStep Form -->
-                            <div class="container-fluid" id="grad1">
-                                <div class="row justify-content-center mt-0">
-                                    <div class="col-11 col-sm-9 col-md-7 col-lg-10 text-center p-0 mt-3 mb-2">
-                                        <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
-                                            <h2>
-                                                <strong>Position Details to Publish</strong>
-                                            </h2>
-                                            <p>Fill all form field to go to next step</p>
-                                            <div class="row">
-                                                <div class="col-md-12 mx-0">
-                                                    <form id="msform">
-                                                        <!-- progressbar -->
-                                                        <ul id="progressbar">
-                                                            <li class="active" id="account">
-                                                                <strong>Publish To</strong>
-                                                            </li>
-                                                            <li id="personal">
-                                                                <strong>Basic Information</strong>
-                                                            </li>
-                                                            <li id="payment"><strong>Publisher Customize</strong></li>
-                                                            <li id="confirm"><strong>Finish</strong></li>
-                                                        </ul> <!-- fieldsets -->
+                        <form id="regForm" action="{{ route('position.store') }}" method="post" enctype="multipart/form-data">
+                            @csrf
 
-                                                        <form action="{{ route('position.store') }}" method="POST" name="myform" class="needs-validation add-product-form" novalidate="">
-                                                            @csrf
-                                                            @method('post')
-                                                            <fieldset>
-                                                                <div class="form-card">
-                                                                    <!-- <h2 class="fs-title">Publish To</h2> -->
-                                                                    <!-- <input type="email" name="email" placeholder="Email Id" />
-                                                                <input type="text" name="uname" placeholder="UserName" />
-                                                                <input type="password" name="pwd" placeholder="Password" />
-                                                                <input type="password" name="cpwd" placeholder="Confirm Password" /> -->
+                            <!-- One "tab" for each step in the form: -->
 
-                                                                    <div class="attribute-blocks center">
-                                                                        <h5 class="f-w-600 mb-3">
-                                                                            Where to publish this position, please click to check those plateforms:
-                                                                        </h5>
+                            <div class="tab">
+                                <h2>Basic Details:</h2>
+                                <hr>
+                                <div class="form-group">
 
-                                                                        <div class="row">
-                                                                            <div class="col-xl-3 col-sm-4">
-                                                                                <label>LinkedIn</label>
-                                                                            </div>
-                                                                            <div class="col-xl-9 col-sm-8">
-                                                                                <div class="form-group m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-                                                                                    <label class="d-block" for="edo-ani1">
-                                                                                        <input class="radio_animated" id="edo-ani1" type="checkbox" name="linkedin" checked>
-                                                                                    </label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-xl-3 col-sm-4">
-                                                                                <label>Click India</label>
-                                                                            </div>
-                                                                            <div class="col-xl-9 col-sm-8">
-                                                                                <div class="form-group m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-                                                                                    <label class="d-block" for="edo-ani1">
-                                                                                        <input class="radio_animated" id="edo-ani1" type="checkbox" name="clickindia">
-                                                                                    </label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-xl-3 col-sm-4">
-                                                                                <label>Monster</label>
-                                                                            </div>
-                                                                            <div class="col-xl-9 col-sm-8">
-                                                                                <div class="form-group m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-                                                                                    <label class="d-block" for="edo-ani1">
-                                                                                        <input class="radio_animated" id="edo-ani1" type="checkbox" name="monster">
-                                                                                    </label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-xl-3 col-sm-4">
-                                                                                <label>Naukri</label>
-                                                                            </div>
-                                                                            <div class="col-xl-9 col-sm-8">
-                                                                                <div class="form-group m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-                                                                                    <label class="d-block" for="edo-ani1">
-                                                                                        <input class="radio_animated" id="edo-ani1" type="checkbox" name="naukri">
-                                                                                    </label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <input type="button" name="next" class="next action-button" value="Next Step" />
-                                                            </fieldset>
-                                                            <fieldset>
-                                                                <div class="form-card">
-                                                                    <h2 class="fs-title">Basic Information</h2>
-                                                                    <div class="row">
-                                                                        <div class="col-12">
-                                                                            <label class="pay">Job Title</label>
-                                                                            <input type="text" class="form-control" name="job_title" placeholder="Job Title" required="" autocomplete="off">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-2">
-                                                                            <label class="pay">
-                                                                                Designation *
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="col-4">
-                                                                            <input type="text" name="designation" class="list-dt" id="designation" required>
-                                                                        </div>
-                                                                        <div class="col-2">
-                                                                            <label class="pay">
-                                                                                Expire On *
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="col-4">
-                                                                            <input type="date" name="expire_on" class="list-dt" id="expire_on" required>
-                                                                        </div>
+                                    <input class="radio_animated" id="edo-ani1" type="checkbox" name="linkedin" checked>Linkiden
 
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-3">
-                                                                            <label class="pay">
-                                                                                Job Type *
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="col-3">
-                                                                            <select name="job_type" class="list-dt" id="job_type" required>
-                                                                                <option value="Full time jobs">Full time jobs
-                                                                                </option>
-                                                                                <option value="Part time jobs">Part time jobs</option>
-                                                                                <option value="Work from home jobs">Work from home jobs</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="col-3">
-                                                                            <label class="pay">
-                                                                                No. of Openings *
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="col-3">
-                                                                            <input type="number" name="vacancies" />
-                                                                        </div>
-                                                                    </div>
+                                </div>
+                                <div class="form-group">
 
-                                                                    <div class="row">
-                                                                        <div class="col-3">
-                                                                            <label class="pay">
-                                                                                Salary Type *
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="col-3">
-                                                                            <select name="salary_type" class="list-dt" id="salary_type" required>
-                                                                                <option value="Per Annum">Per Annum</option>
-                                                                                <option value="Per Hour">Per Hour</option>
-                                                                                <option value="Per Day">Per Day</option>
-                                                                                <option value="Per Week">Per Week</option>
-                                                                                <option value="Per Month">Per Month</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="col-1">
-                                                                            <label class="pay">
-                                                                                Min.
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="col-2">
-                                                                            <input type="text" name="minimum_salary" placeholder="350000" />
-                                                                        </div>
-                                                                        <div class="col-1">
-                                                                            <label class="pay">
-                                                                                Max.
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="col-2">
-                                                                            <input type="text" name="maximum_salary" placeholder="500000" />
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-12">
-                                                                            <label class="pay">
-                                                                                Job Description *
-                                                                            </label>
-                                                                            <textarea name="job_description" class="form-control" id="job_description" cols="5" rows="3" required></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-3">
-                                                                            <label class="pay">
-                                                                                For Company / Client
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="col-3">
-                                                                            <select name="client_id" class="list-dt" id="client_id" required>
-                                                                                <option value="">Select Client</option>
-                                                                                <option value="Ashish">Ashish</option>
-                                                                                <option value="Akram">Akram</option>
-                                                                                <option value="Nitesh">Nitesh</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="col-2">
-                                                                            <label class="pay">
-                                                                                URL:
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="col-4">
-                                                                            <input type="text" name="company_url" placeholder="e.g. white-force.com" />
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-12">
-                                                                            <label class="pay">
-                                                                                Company / Client Description
-                                                                            </label>
-                                                                            <textarea type="text" class="form-control" cols="5" rows="3" name="company_description" placeholder="" autocomplete="off"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
-                                                                <input type="button" name="next" class="next action-button" value="Next Step" />
-                                                            </fieldset>
-                                                            <fieldset>
-                                                                <div class="form-card">
-                                                                    <h2 class="fs-title">Publisher Customize</h2>
-                                                                    <h5 class="f-w-600 mb-3">
-                                                                        Click India Custom Form
-                                                                    </h5>
+                                    <input class="radio_animated" id="edo-ani1" type="checkbox" name="clickindia">Clickindia
+                                </div>
+                                <div class="form-group">
 
-                                                                    <div class="row">
-                                                                        <div class="col-3">
-                                                                            <label class="pay">
-                                                                                Minimum Qualification:
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="col-3">
-                                                                            <select name="minimum_qualification" class="list-dt" id="minimum_qualification" required>
-                                                                                <option value="< 10th">Below 10th</option>
-                                                                                <option value="10th">10th</option>
-                                                                                <option value="12th">12th</option>
-                                                                                <option value="Diploma">Diploma</option>
-                                                                                <option value="Bachelors" selected>Bachelors</option>
-                                                                                <option value="Masters">Masters</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="col-3">
-                                                                            <label class="pay">
-                                                                                Minimum Experience:
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="col-3">
-                                                                            <select name="minimum_experience" class="list-dt" id="minimum_experience" required>
-                                                                                <option value="Fresher" selected>Fresher</option>
-                                                                                <option value="1 yr">1 yr</option>
-                                                                                <option value="2 yrs">2 yrs</option>
-                                                                                <option value="3 yrs">3 yrs</option>
-                                                                                <option value="4 yrs">4 yrs</option>
-                                                                                <option value="5 yrs">5 yrs</option>
-                                                                                <option value="6-9 yrs">6-9 yrs</option>
-                                                                                <option value="10-15 yrs">10-15 yrs</option>
-                                                                                <option value="15 above">15 Above</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
+                                    <input class="radio_animated" id="edo-ani1" type="checkbox" name="monster">Monster
 
-                                                                    <hr>
-                                                                    <div class="row">
-                                                                        <div class="col-3">
-                                                                            <label class="pay">
-                                                                                Working Days:
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="col-1">
-                                                                            Mon<input type="checkbox" name="working_days[]" id="working_days" value="Mon" checked>
-                                                                        </div>
-                                                                        <div class="col-1">
-                                                                            Tue<input type="checkbox" name="working_days[]" id="working_days" value="Tue" checked>
-                                                                        </div>
-                                                                        <div class="col-1">
-                                                                            Wed<input type="checkbox" name="working_days[]" id="working_days" value="Wed" checked>
-                                                                        </div>
-                                                                        <div class="col-1">
-                                                                            Thu<input type="checkbox" name="working_days[]" id="working_days" value="Thu" checked>
-                                                                        </div>
-                                                                        <div class="col-1">
-                                                                            Fri<input type="checkbox" name="working_days[]" id="working_days" value="Fri" checked>
-                                                                        </div>
-                                                                        <div class="col-1">
-                                                                            Sat<input type="checkbox" name="working_days[]" id="working_days" value="Sat">
-                                                                        </div>
-                                                                        <div class="col-1">
-                                                                            Sun<input type="checkbox" name="working_days[]" id="working_days" value="Sun">
-                                                                        </div>
+                                </div>
+                                <div class="form-group">
 
-                                                                        <div class="col-3">
-                                                                            <label class="pay">
-                                                                                Required Candidate:
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="col-3">
-                                                                            <select name="required_candidate" class="list-dt" id="required_candidate" required>
-                                                                                <option value="Male / Female" selected>Male / Female</option>
-                                                                                <option value="Male only">Male only</option>
-                                                                                <option value="Female only">Female only</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <hr>
-                                                                    <label class="pay">Hiring Process*</label>
-                                                                    <input type="text" name="hiring_process" id="hiring_process" placeholder="Telephonic, Walkin,Written test, Group Discussion, Interview" />
-                                                                </div>
-                                                                <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
-                                                                <!-- <input type="button" name="make_payment" class="next action-button" value="Confirm" /> -->
-                                                                <button type="submit" class="next action-button" onclick="submit_button();" value="Submit Now" />Submit</button>
-                                                            </fieldset>
+                                    <input class="radio_animated" id="edo-ani1" type="checkbox" name="naukri">Naukri
 
-                                                            <fieldset>
-                                                                <div class="form-card">
-                                                                    <h2 class="fs-title text-center">Success !</h2> <br><br>
-                                                                    <div class="row justify-content-center">
-                                                                        <div class="col-3"> <img src="https://img.icons8.com/color/96/000000/ok--v2.png" class="fit-image"> </div>
-                                                                    </div> <br><br>
-                                                                    <div class="row justify-content-center">
-                                                                        <div class="col-7 text-center">
-                                                                            <h5>
-                                                                                You Have Successfully Posted a Job
-                                                                            </h5>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-                                                        </form>
+                                </div>
+                            </div>
+                            <div class="tab">
+                                <h2>Basic Information:</h2>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="pay">Job Title</label>
+                                            <input type="text" class="form-control" name="job_title" placeholder="Job Title" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="pay">Designation</label>
+                                            <input type="text" name="designation" class="list-dt form-control" id="designation">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="pay">Expire On</label>
+                                            <input type="date" name="expire_on" class="list-dt form-control" id="expire_on">
+                                        </div>
+                                    </div>
 
-                                                        <script>
-                                                            function submit_button() {
-                                                                $('form#myform').submit;
-                                                            }
-                                                        </script>
-                                                </div>
-                                            </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="pay">No Of Openings</label>
+                                            <input type="number" name="vacancies" class="list-dt form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="pay">Salary Min</label>
+                                            <input type="number" name="minimum_salary" class="form-control" placeholder="350000" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="pay">Salary Max</label>
+                                            <input type="number" name="maximum_salary" class="form-control" placeholder="500000" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="pay">Job Description</label>
+                                            <textarea name="job_description" class="form-control" id="job_description" cols="5" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="skills">Required Skills</label>
+                                            <input type="text" class="list-dt form-control" name="skills" placeholder="e.g. Angular, Laravel, Java etc." />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="pay">Company</label>
+                                            <select name="company_id" class="list-dt form-control" id="company_id">
+                                                <option value="">Select Client</option>
+                                                @if(count($companies))
+                                                @foreach($companies as $company)
+                                                <option value="{{$company->id}}">
+                                                    {{ isset($company->name)?$company->name:'' }}
+                                                </option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="pay">Company Url</label>
+                                            <input type="text" class="list-dt form-control" name="company_url" placeholder="e.g. white-force.com" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="pay">Job Apply URL</label>
+                                            <input type="text" class="list-dt form-control" name="apply_button_url" placeholder="e.g. white-force.com/job-description/MjM0" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="pay">Company Location</label>
+                                            <input type="text" class="list-dt form-control" name="company_location" placeholder="" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="pay">Company Description</label>
+                                            <textarea type="text" class="form-control" cols="5" rows="3" name="company_description" placeholder="" autocomplete="off"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="pay">Other Details</label>
+                                            <textarea type="text" class="form-control" cols="5" rows="2" name="other" placeholder="" autocomplete="off"></textarea>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
+                            <div class="tab">
+                                <h2>Publisher Customize</h2>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="pay">Job Category</label>
+                                            <select name="click_india_job_category" class="list-dt form-control" id="click_india_job_category">
+                                                @if(count($clickIndiaJobCategory))
+                                                @foreach($clickIndiaJobCategory as $jobcategory)
+                                                <option value="{{ $jobcategory->id }}">
+                                                    {{ isset($jobcategory->category_name)?$jobcategory->category_name:'' }}
+                                                </option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="pay">Job City</label>
+                                            <select name="click_india_city_id" class="list-dt form-control" id="click_india_city_id">
+                                                @if(count($clickIndiaCity))
+                                                @foreach($clickIndiaCity as $jobcity)
+                                                <option value="{{ $jobcity->id }}">
+                                                    {{ isset($jobcity->city_name)?$jobcity->city_name:'' }}
+                                                </option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="pay">Qualification</label>
+                                            <select name="click_india_minimum_qualification" class="list-dt form-control" id="click_india_minimum_qualification">
+                                                <option value="< 10th">Below 10th</option>
+                                                <option value="10th">10th</option>
+                                                <option value="12th">12th</option>
+                                                <option value="Diploma">Diploma</option>
+                                                <option value="Bachelors" selected>Bachelors</option>
+                                                <option value="Masters">Masters</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="pay">Minimum Experience:</label>
+                                            <select name="click_india_minimum_experience" class="list-dt form-control" id="click_india_minimum_experience">
+                                                <option value="Fresher" selected>Fresher</option>
+                                                <option value="1 yr">1 yr</option>
+                                                <option value="2 yrs">2 yrs</option>
+                                                <option value="3 yrs">3 yrs</option>
+                                                <option value="4 yrs">4 yrs</option>
+                                                <option value="5 yrs">5 yrs</option>
+                                                <option value="6-9 yrs">6-9 yrs</option>
+                                                <option value="10-15 yrs">10-15 yrs</option>
+                                                <option value="15 above">15 Above</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="pay">Job Type</label>
+                                            <select name="job_type" class="list-dt form-control" id="job_type">
+                                                <option value="Full time jobs">Full time jobs
+                                                </option>
+                                                <option value="Part time jobs">Part time jobs</option>
+                                                <option value="Work from home jobs">Work from home jobs</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="pay">Salary Type</label>
+                                            <select name="salary_type" class="list-dt form-control" id="salary_type">
+                                                <option value="Per Annum">Per Annum</option>
+                                                <option value="Per Hour">Per Hour</option>
+                                                <option value="Per Day">Per Day</option>
+                                                <option value="Per Week">Per Week</option>
+                                                <option value="Per Month">Per Month</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="pay">Working Day</label>
+                                            <div class="row">
+                                                <div class="col-1">
+                                                    Mon <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Mon" checked>
+                                                </div>
+                                                <div class="col-1">
+                                                    Tue <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Tue" checked>
+                                                </div>
+                                                <div class="col-1">
+                                                    Wed <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Wed" checked>
+                                                </div>
+                                                <div class="col-1">
+                                                    Thu <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Thu" checked>
+                                                </div>
+                                                <div class="col-1">
+                                                    Fri <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Fri" checked>
+                                                </div>
+                                                <div class="col-1">
+                                                    Sat <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Sat">
+                                                </div>
+                                                <div class="col-1">
+                                                    Sun <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Sun">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="pay">Required Candidate:</label>
+                                            <select name="click_india_required_candidate" class="list-dt form-control" id="click_india_required_candidate">
+                                                <option value="Male / Female" selected>Male / Female</option>
+                                                <option value="Male only">Male only</option>
+                                                <option value="Female only">Female only</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="pay">Hiring Process:</label>
+                                            <input type="text" class="form-control" name="click_india_hiring_process" id="click_india_hiring_process" placeholder="Telephonic, Walkin,Written test, Group Discussion, Interview" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="overflow:auto;">
+                                <div style="float:right;">
+                                    <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                                    <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+                                </div>
+                            </div>
+                            <!-- Circles which indicates the steps of the form: -->
+                            <div style="text-align:center;margin-top:40px;">
+                                <span class="step"></span>
+                                <span class="step"></span>
+                                <span class="step"></span>
+                            </div>
+                        </form>
+
+                        <script>
+                            var currentTab = 0; // Current tab is set to be the first tab (0)
+                            showTab(currentTab); // Display the current tab
+
+                            function showTab(n) {
+                                // This function will display the specified tab of the form...
+                                var x = document.getElementsByClassName("tab");
+                                x[n].style.display = "block";
+                                //... and fix the Previous/Next buttons:
+                                if (n == 0) {
+                                    document.getElementById("prevBtn").style.display = "none";
+                                } else {
+                                    document.getElementById("prevBtn").style.display = "inline";
+                                }
+                                if (n == (x.length - 1)) {
+                                    document.getElementById("nextBtn").innerHTML = "Submit";
+                                } else {
+                                    document.getElementById("nextBtn").innerHTML = "Next";
+                                }
+                                //... and run a function that will display the correct step indicator:
+                                fixStepIndicator(n)
+                            }
+
+                            function nextPrev(n) {
+                                // This function will figure out which tab to display
+                                var x = document.getElementsByClassName("tab");
+                                // Exit the function if any field in the current tab is invalid:
+                                if (n == 1 && !validateForm()) return false;
+                                // Hide the current tab:
+                                x[currentTab].style.display = "none";
+                                // Increase or decrease the current tab by 1:
+                                currentTab = currentTab + n;
+                                // if you have reached the end of the form...
+                                if (currentTab >= x.length) {
+                                    // ... the form gets submitted:
+                                    document.getElementById("regForm").submit();
+                                    return false;
+                                }
+                                // Otherwise, display the correct tab:
+                                showTab(currentTab);
+                            }
+
+                            function validateForm() {
+                                // This function deals with validation of the form fields
+                                var x, y, i, valid = true;
+                                x = document.getElementsByClassName("tab");
+                                y = x[currentTab].getElementsByTagName("input");
+                                // A loop that checks every input field in the current tab:
+                                for (i = 0; i < y.length; i++) {
+                                    // If a field is empty...
+                                    if (y[i].value == "") {
+                                        // add an "invalid" class to the field:
+                                        y[i].className += " invalid";
+                                        // and set the current valid status to false
+                                        valid = false;
+                                    }
+                                }
+                                // If the valid status is true, mark the step as finished and valid:
+                                if (valid) {
+                                    document.getElementsByClassName("step")[currentTab].className += " finish";
+                                }
+                                return valid; // return the valid status
+                            }
+
+                            function fixStepIndicator(n) {
+                                // This function removes the "active" class of all steps...
+                                var i, x = document.getElementsByClassName("step");
+                                for (i = 0; i < x.length; i++) {
+                                    x[i].className = x[i].className.replace(" active", "");
+                                }
+                                //... and adds the "active" class on the current step:
+                                x[n].className += " active";
+                            }
+                        </script>
                     </div>
                 </div>
             </div>
@@ -630,83 +683,4 @@
     </div>
     <!-- Container-fluid Ends-->
 </div>
-
-<script>
-    $(document).ready(function() {
-
-        var current_fs, next_fs, previous_fs; //fieldsets
-        var opacity;
-
-        $(".next").click(function() {
-
-            current_fs = $(this).parent();
-            next_fs = $(this).parent().next();
-
-            //Add Class Active
-            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-
-            //show the next fieldset
-            next_fs.show();
-            //hide the current fieldset with style
-            current_fs.animate({
-                opacity: 0
-            }, {
-                step: function(now) {
-                    // for making fielset appear animation
-                    opacity = 1 - now;
-
-                    current_fs.css({
-                        'display': 'none',
-                        'position': 'relative'
-                    });
-                    next_fs.css({
-                        'opacity': opacity
-                    });
-                },
-                duration: 600
-            });
-        });
-
-        $(".previous").click(function() {
-
-            current_fs = $(this).parent();
-            previous_fs = $(this).parent().prev();
-
-            //Remove class active
-            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-
-            //show the previous fieldset
-            previous_fs.show();
-
-            //hide the current fieldset with style
-            current_fs.animate({
-                opacity: 0
-            }, {
-                step: function(now) {
-                    // for making fielset appear animation
-                    opacity = 1 - now;
-
-                    current_fs.css({
-                        'display': 'none',
-                        'position': 'relative'
-                    });
-                    previous_fs.css({
-                        'opacity': opacity
-                    });
-                },
-                duration: 600
-            });
-        });
-
-        $('.radio-group .radio').click(function() {
-            $(this).parent().find('.radio').removeClass('selected');
-            $(this).addClass('selected');
-        });
-
-        $(".submit").click(function() {
-            return false;
-        })
-
-    });
-</script>
 @endsection

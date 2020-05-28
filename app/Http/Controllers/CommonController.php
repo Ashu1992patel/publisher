@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Job;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -28,8 +29,10 @@ class CommonController extends Controller
         $body->text->text = $message;   //any message to be posted
         $body_json = json_encode($body, true);
 
+
         try {
             $client = new Client(['base_uri' => 'https://api.linkedin.com']);
+
             $response = $client->request('POST', '/v2/shares', [
                 'headers' => [
                     "Authorization" => "Bearer " . $access_token,
@@ -38,6 +41,7 @@ class CommonController extends Controller
                 ],
                 'body' => $body_json,
             ]);
+            // dd($response);
 
             if ($response->getStatusCode() !== 201) {
                 echo 'Error: ' . $response->getLastBody()->errors[0]->message;
@@ -50,9 +54,11 @@ class CommonController extends Controller
         }
     }
 
-    public function sendToClickIndia($job_position_id, $job_category_id, $job_education_qualification)
+    public function sendToClickIndia($job_position_id)
     {
-        dd($_REQUEST);
+        // dd($_REQUEST);
+        $job = Job::find($job_position_id);
+        // dd($job);
         try {
             $client = new Client();
             $url = "https://www.clickindia.com/cron/jobs_business_api.php";
@@ -65,38 +71,38 @@ class CommonController extends Controller
                 //     'testing123'
                 // ],
                 'json' => [
-                    'job_id' => $job_position_id,
-                    'job_title' => request('positionName'),
-                    'job_description' => request('job_description'),
-                    'job_category' => 423,
-                    'job_city' => request('positionCity'),
-                    // 'job_location' => $position->positionState,
-                    'job_location' => request('location'),
-                    'job_pref_loc' => request('location'),
-                    'qualification' => $job_education_qualification,
-                    'experience' => request('minYearExp') . '-' . request('maxYearExp'),
-                    'job_type' => request('jobType'),
-                    'payroll_type' => request('payroll_type'),
-                    'salary' => 650000,
-                    // 'salary' => $request->minSalary . '-' . $request->maxSalary,
-                    'salary_type' => request('salary_type'),
-                    'designation' => request('designation'),
-                    'working_days' => request('working_days'),
-                    'gender' => request('gender'),
-                    'hiring_process' => request('hiring_process'),
-                    'vacancy' => request('openings'),
-                    'skills' => request('skillSet'),
-                    'languages' => request('languages'),
-                    'listing_url' => request('listing_url'),
-                    'company' => request('company'),
-                    // 'company_logo' => $company_logo_path,
-                    'company_website' => request('company_website'),
-                    'company_profile' => request('company_profile'),
-                    'other' => request('other'),
+                    'job_id' => $job->id,
+                    'job_title' => $job->job_title,
+                    'designation' => $job->designation,
+                    'job_roles' => $job->roles,
+                    'expire_on' => $job->expire_on,
+                    'job_type' => $job->job_type,
+                    'vacancies' => $job->vacancies,
+                    'salary_type' => $job->salary_type,
+                    'minimum_salary' => $job->minimum_salary,
+                    'maximum_salary' => $job->maximum_salary,
+                    'job_description' => $job->job_description,
+                    'company_name' => $job->company->name,
+                    'company_url' => $job->company_url,
+                    'company_location' => $job->company_location,
+                    'apply_button_url' => $job->apply_button_url,
+                    'company_description' => $job->company_description,
+                    'job_category' => $job->click_india_job_category_id,
+                    'job_city' => $job->click_india_city->city_name,
+                    'minimum_qualification' => $job->click_india_minimum_qualification,
+                    'minimum_experience' => $job->click_india_minimum_experience,
+                    'minimum_qualification' => $job->click_india_minimum_qualification,
+                    'click_india_working_days' => $job->click_india_working_days,
+                    'required_candidate' => $job->click_india_required_candidate,
+                    'hiring_process' => $job->click_india_hiring_process,
+                    'skills' => $job->skills,
+                    'other' => $job->other,
                 ],
             ]);
 
+            // dd($response);
             if ($response->getBody()) {
+                dump('Post sent to Click India');
                 return 1;
             } else {
                 return 0;

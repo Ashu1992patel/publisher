@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+-<JobPositionPostings xmlns="http://monsterindia.com/schema/Monster/JobPost">
+    -<Jobs>
+        -<Job Language="EN" JobRefId="62" Moderate="1" JobAction="addOrUpdate" Country="IND">
+            -<Contact showContactDetails="true" hideCompanyName="false">
+                <Phone>
+                    <![CDATA[9981435702]]>
+                </Phone>
+                <Email>
+                    <![CDATA[ashish@white-force.com]]>
+                </Email>
+                <Name>
+                    <![CDATA[HAPPY SQUARE OUTSOURCING SERVICE PRIVATE LIMITED]]>
+                </Name>
+            </Contact>
+            <ScrapingInfo>
+                <Category>
+                    <![CDATA[IT, IT/ Computers - Software, ^22]]>
+                </Category>
+                <Stream>
+                    <![CDATA[^22]]>
+                </Stream>
+                <Level>
+                    <![CDATA[^8]]>
+                </Level>
+                <Industry>
+                    <![CDATA[^32]]>
+                </Industry>
+                <Experience>
+                    <![CDATA[2 years^4.0,7.0]]>
+                </Experience>
+                <Role>
+                    <![CDATA[^734]]>
+                </Role>
+                <Location>
+                    <![CDATA[Jabalpur^71]]>
+                </Location>
+                <KeySkills>
+                    <![CDATA[Laravel, PHP, HTML, CSS, React]]>
+                </KeySkills>
+            </ScrapingInfo>
+            <JobInformation>
+                <Industries>
+                    <Industry>
+                        <![CDATA[32]]>
+                    </Industry>
+                </Industries>
+                <Salary>
+                    <Currency>
+                        <monsterId>
+                            <![CDATA[4]]>
+                        </monsterId>
+                    </Currency>
+                    <MaximumSalary>
+                        <![CDATA[500000]]>
+                    </MaximumSalary>
+                    <MinimumSalary>
+                        <![CDATA[362000]]>
+                    </MinimumSalary>
+                </Salary>
+                <JobType>
+                    <![CDATA[Permanent]]>
+                </JobType>
+                <Roles>
+                    <Role>
+                        <![CDATA[734]]>
+                    </Role>
+                </Roles>
+                <CompanyName>
+                    <![CDATA[HAPPY SQUARE OUTSOURCING SERVICE PRIVATE LIMITED]]>
+                </CompanyName>
+                <JobTitle>
+                    <![CDATA[Laravel Developer]]>
+                </JobTitle>
+                <ApplyUrl>
+                    <![CDATA[https://happiestresume.com/job-description/NjI=]]>
+                </ApplyUrl>
+                <KeySkills>
+                    <![CDATA[Laravel, PHP, HTML, CSS, React]]>
+                </KeySkills>
+                <Locations>
+                    <Location>
+                        <![CDATA[71]]>
+                    </Location>
+                </Locations>
+                <AutoMatched>
+                    <![CDATA[0]]>
+                </AutoMatched>
+                <Filter>
+                    <Loc_Filter>
+                        <![CDATA[69]]>
+                    </Loc_Filter>
+                    <Nationality_Filter>
+                        <pr>
+                            <![CDATA[0]]>
+                        </pr>
+                        <Nationality>
+                            <![CDATA[0]]>
+                        </Nationality>
+                    </Nationality_Filter>
+                </Filter>
+                <AppsByMail>
+                    <![CDATA[0]]>
+                </AppsByMail>
+                <JobDescription>
+                    <![CDATA[<div><div class="entry-content h4"> <p><strong>Job Responsibilities</strong></p> <ul> <li>Design and build advanced applications for the Android platform</li> <li>Collaborate with cross-functional teams to define, design, and ship new features</li> <li>Work with outside data sources and APIs</li> <li>Unit-test code for robustness, including edge cases, usability, and general reliability</li> <li>Work on bug fixing and improving application performance</li> <li>Continuously discover, evaluate, and implement new technologies to maximize development efficiency</li> </ul> <p><strong> </strong></p> <p><strong>Key Requirements</strong></p> <ul> <li>Minimum 4 years software development experience and Android skills development</li> <li>Proven working experience in Android app development and</li> <li>Have published at least one original Android app</li> <li>Experience with Android native application development (java), Kotlin or Android SDK</li> <li>Experience working with remote data via REST and JSON</li> <li>Working knowledge of the general mobile landscape, architectures, trends, and emerging technologies</li> <li>Solid understanding of the full mobile development life cycle.</li> <li>Experience integrating with common Social APIs</li> </ul> </div></div>]]>
+                </JobDescription>
+                <Channel monsterId="4">
+                    <![CDATA[1]]>
+                </Channel>
+                <FreeTextCols>
+                    <LocFreeText>
+                        <LOC id="71">
+                            <![CDATA[]]>
+                        </LOC>
+                    </LocFreeText>
+                    <RolesFreeText>
+                        <ROL id="734">
+                            <![CDATA[]]>
+                        </ROL>
+                    </RolesFreeText>
+                </FreeTextCols>
+                <ScrapingUrl>
+                    <![CDATA[https://happiestresume.com/job-description/NjI=]]>
+                </ScrapingUrl>
+                <AboutCompany>
+                    <![CDATA[<div>SaiSun, a fastest growing ISO 9001: 2008 certified, multi-process human resource outsourcing consulting group having Global Presence. Mr. Shalesh Rajpal is the Managing Director of SaiSun Outsourcing Pvt Ltd Company. An MBA from a Premier Institute & certificate course in Management from University of Australia. He started his own company in 2006, after having vast experience in Human Resource Management area. Under his guidance, SaiSun Group has become a dynamic business reality. An astute businessman, his keenness for perfection & an eye for minute detail added with his firm belief in his vision has taken SaiSun Group to reach unbelievable success in such a short span of time.</div>]]>
+                </AboutCompany>
+                <Nationality />
+                <Education>
+                    <Stream>
+                        <![CDATA[22]]>
+                    </Stream>
+                    <Level>
+                        <![CDATA[8]]>
+                    </Level>
+                </Education>
+                <Categories>
+                    <Category>
+                        <![CDATA[22]]>
+                    </Category>
+                </Categories>
+                <WorkExperience>
+                    <MaximumYear>
+                        <![CDATA[5.5]]>
+                    </MaximumYear>
+                    <MinimumYear>
+                        <![CDATA[2.5]]>
+                    </MinimumYear>
+                </WorkExperience>
+            </JobInformation>
+            <ApplyOnlineURL>
+                <![CDATA[https://happiestresume.com/job-description/NjI=]]>
+            </ApplyOnlineURL>
+        </Job>
+    </Jobs>
+    <CompanyReference CorpId="349222">
+        <Username>
+            <![CDATA[FTPaccount]]>
+        </Username>
+        <Company>
+            <![CDATA[HAPPY SQUARE OUTSOURCING SERVICE PRIVATE LIMITED]]>
+        </Company>
+        <Startup>
+            <STP_SRC>
+                <![CDATA[undefined]]>
+            </STP_SRC>
+            <MSUP>
+                <![CDATA[undefined]]>
+            </MSUP>
+        </Startup>
+        <Password>
+            <![CDATA[password]]>
+        </Password>
+        <CompanyURL>
+            <![CDATA[http://white-force.com/]]>
+        </CompanyURL>
+    </CompanyReference>
+</JobPositionPostings>
