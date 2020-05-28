@@ -32,7 +32,7 @@ class HomeController extends Controller
     public function index()
     {
         $jobPositions = JobPosition::get();
-        $jobs = Job::get();
+        $jobs = Job::orderBy('desc')->get();
         return view('backend.dashboard', compact('jobPositions', 'jobs'));
         return view('home');
     }
