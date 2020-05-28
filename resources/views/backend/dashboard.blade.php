@@ -116,20 +116,19 @@
                                         <th scope="col">Experience</th> -->
                                         <th scope="col">Action</th>
                                         <th>S.No</th>
-                                        <th scope="col">Client</th>
-                                        <th scope="col">State</th>
-                                        <th scope="col">City</th>
-                                        <th scope="col">Name</th>
+                                        <th scope="col">Company</th>
+                                        <th scope="col">Company City</th>
+                                        <th scope="col">Job Title</th>
                                         <th scope="col">Close Date</th>
                                         <th scope="col">Openings</th>
                                         <th scope="col">Location</th>
-                                        <th scope="col">Skill</th>
+                                        <th scope="col">Skills</th>
                                         <th scope="col">Description</th>
                                         <th scope="col">Min. Year Exp</th>
-                                        <th scope="col">Max. Year Exp</th>
                                         <th scope="col">Education Qualification</th>
                                         <th scope="col">Min. Salary</th>
                                         <th scope="col">Max. Salary</th>
+                                        <th scope="col">Job Type</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -143,7 +142,7 @@
                                             </a>
                                         </td>
                                         <td>{{ ++$key }}</td>
-                                        <td>{{ isset($jobPosition->company_id)?$jobPosition->company_id:'' }}</td>
+                                        <td>{{ isset($jobPosition->company->name)?$jobPosition->company->name:'' }}</td>
                                         <td>{{ isset($jobPosition->click_india_city->city_name)?$jobPosition->click_india_city->city_name:'' }}</td>
                                         <td>{{ isset($jobPosition->job_title)?$jobPosition->job_title:'' }}</td>
                                         <td>{{ Carbon\Carbon::parse($jobPosition->expire_on)->format('d-M-Y') }}</td>
@@ -155,8 +154,6 @@
                                         <td>{{ isset($jobPosition->click_india_minimum_qualification)?$jobPosition->click_india_minimum_qualification:'' }}</td>
                                         <td>{{ isset($jobPosition->minimum_salary)?$jobPosition->minimum_salary:'' }}</td>
                                         <td>{{ isset($jobPosition->maximum_salary)?$jobPosition->maximum_salary:'' }}</td>
-                                        <td>{{ isset($jobPosition->job_type)?$jobPosition->job_type:'' }}</td>
-                                        <td>{{ isset($jobPosition->gender)?$jobPosition->gender:'' }}</td>
                                     </tr>
                                     @endforeach
                                     @endif
