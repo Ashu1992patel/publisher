@@ -2,6 +2,11 @@
 @section('title', 'Job Post')
 @section('body')
 
+<style>
+    small {
+        color: red;
+    }
+</style>
 {{-- <style>
     * {
         margin: 0;
@@ -353,6 +358,245 @@
                                 </div>
                             </div>
                             <div class="tab">
+                                <h2>Monster Information:</h2>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="pay">Industry <small>(monster)</small></label>
+                                            <select name="monster_industry_id" class="list-dt form-control" id="monster_industry_id" onchange="getIndustryCategoryFunction(this.value);">
+                                                <option value="0">-Select Industry type-</option>
+                                                @if(count($monster_industries))
+                                                @foreach($monster_industries as $industry)
+                                                <option value="{{ $industry->industry_id }}">
+                                                    {{ isset($industry->industry_name)?$industry->industry_name:'' }}
+                                                </option>
+                                                @endforeach
+                                                @endif
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6" id="category_funcion_div">
+                                        <div class="form-group">
+                                            <label class="pay">Category Function <small>(monster)</small></label>
+                                            <select name="category_function_id" class="list-dt form-control" id="category_function_id" onchange="getCategoryRole(this.value);">
+                                                <option value="0">-Select Category Function-</option>
+                                                @if(count($monster_categoryfuntion))
+                                                @foreach($monster_categoryfuntion as $categoryfunction)
+                                                <option value="{{ $categoryfunction->category_function_id }}">
+                                                    {{ isset($categoryfunction->category_function_name)?$categoryfunction->category_function_name:'' }}
+                                                </option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6" id="category_role_div">
+                                        <div class="form-group">
+                                            <label class="pay">Category Roles <small>(monster)</small></label>
+                                            <select name="category_role_id" class="list-dt form-control" id="category_role_id">
+                                                <option value="0">-Select Category Role-</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="pay">
+                                                Education Levels <small>(monster)</small>
+                                            </label>
+                                            <select name="monster_education_level_id" class="list-dt form-control" id="monster_education_level_id" onchange="getMonsterEducationStream(this.value);">
+                                                <option value="0">-Select Education Level-</option>
+                                                @if(count($monster_education_levels))
+                                                @foreach($monster_education_levels as $monster_education_level)
+                                                <option value="{{ $monster_education_level->id }}">
+                                                    {{ isset($monster_education_level->degree)?$monster_education_level->degree:'' }}
+                                                </option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3" id="monster_education_stream_div">
+                                        <div class="form-group">
+                                            <label class="pay">Education Stream <small>(monster)</small></label>
+                                            <select name="monster_education_stream_id" class="list-dt form-control" id="monster_education_stream_id">
+                                                <option value="0">-Select Education Stream-</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="pay">
+                                                Job Location <small>(monster)</small>
+                                            </label>
+                                            <select name="monster_location_id" class="list-dt form-control" id="monster_location_id">
+                                                <option value="0">-Select Location-</option>
+                                                @if(count($monster_locations))
+                                                @foreach($monster_locations as $monster_location)
+                                                <option value="{{ $monster_location->id }}">
+                                                    {{ isset($monster_location->location)?$monster_location->location:'' }}
+                                                </option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab">
+                                <h2>CLICK INDIA INFORMATION : </h2>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="pay">Job Category <small>(click india)</small></label>
+                                            <select name="click_india_job_category" class="list-dt form-control" id="click_india_job_category">
+                                                @if(count($clickIndiaJobCategory))
+                                                @foreach($clickIndiaJobCategory as $jobcategory)
+                                                <option value="{{ $jobcategory->id }}">
+                                                    {{ isset($jobcategory->category_name)?$jobcategory->category_name:'' }}
+                                                </option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="pay">Job City <small>(click india)</small></label>
+                                            <select name="click_india_city_id" class="list-dt form-control" id="click_india_city_id" onchange="getCityNameField(this.value);">
+                                                <option value="0">-Select City-</option>
+                                                <option value="0">Not Found</option>
+                                                @if(count($clickIndiaCity))
+                                                @foreach($clickIndiaCity as $jobcity)
+                                                <option value="{{ $jobcity->id }}">
+                                                    {{ isset($jobcity->city_name)?$jobcity->city_name:'' }}
+                                                </option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3" id="click_india_city_name_field">
+                                        <div class="form-group">
+                                            <label class="pay">
+                                                City (If Not Found) <small>(click india)</small>
+                                            </label>
+                                            <input name="click_india_city_name" class="list-dt form-control" id="click_india_city_name" value="NA">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="pay">Qualification <small>(click india)</small></label>
+                                            <select name="click_india_minimum_qualification" class="list-dt form-control" id="click_india_minimum_qualification">
+                                                <option value="< 10th">Below 10th</option>
+                                                <option value="10th">10th</option>
+                                                <option value="12th">12th</option>
+                                                <option value="Diploma">Diploma</option>
+                                                <option value="Bachelors" selected>Bachelors</option>
+                                                <option value="Masters">Masters</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="pay">Minimum Experience: <small>(click india)</small></label>
+                                            <select name="click_india_minimum_experience" class="list-dt form-control" id="click_india_minimum_experience">
+                                                <option value="Fresher" selected>Fresher</option>
+                                                <option value="1 yr">1 yr</option>
+                                                <option value="2 yrs">2 yrs</option>
+                                                <option value="3 yrs">3 yrs</option>
+                                                <option value="4 yrs">4 yrs</option>
+                                                <option value="5 yrs">5 yrs</option>
+                                                <option value="6-9 yrs">6-9 yrs</option>
+                                                <option value="10-15 yrs">10-15 yrs</option>
+                                                <option value="15 above">15 Above</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="pay">Job Type <small>(click india)</small></label>
+                                            <select name="job_type" class="list-dt form-control" id="job_type">
+                                                <option value="Full time jobs">Full time jobs
+                                                </option>
+                                                <option value="Part time jobs">Part time jobs</option>
+                                                <option value="Work from home jobs">Work from home jobs</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="pay">Salary Type <small>(click india)</small></label>
+                                            <select name="salary_type" class="list-dt form-control" id="salary_type">
+                                                <option value="Per Annum">Per Annum</option>
+                                                <option value="Per Hour">Per Hour</option>
+                                                <option value="Per Day">Per Day</option>
+                                                <option value="Per Week">Per Week</option>
+                                                <option value="Per Month">Per Month</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="pay">Required Candidate <small>(click india)</small></label>
+                                            <select name="click_india_required_candidate" class="list-dt form-control" id="click_india_required_candidate">
+                                                <option value="Male / Female" selected>Male / Female</option>
+                                                <option value="Male only">Male only</option>
+                                                <option value="Female only">Female only</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="pay">Working Day <small>(click india)</small></label>
+                                            <div class="row">
+                                                <div class="col-1">
+                                                    Mon <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Mon" checked>
+                                                </div>
+                                                <div class="col-1">
+                                                    Tue <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Tue" checked>
+                                                </div>
+                                                <div class="col-1">
+                                                    Wed <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Wed" checked>
+                                                </div>
+                                                <div class="col-1">
+                                                    Thu <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Thu" checked>
+                                                </div>
+                                                <div class="col-1">
+                                                    Fri <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Fri" checked>
+                                                </div>
+                                                <div class="col-1">
+                                                    Sat <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Sat">
+                                                </div>
+                                                <div class="col-1">
+                                                    Sun <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Sun">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="pay">Hiring Process <small>(click india)</small></label>
+                                            <input type="text" class="form-control" name="click_india_hiring_process" id="click_india_hiring_process" placeholder="Telephonic, Walk-In, Written test, Group Discussion, Interview" value="Telephonic, Walk-In, Written test, Group Discussion, Interview" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab">
                                 <h2>Basic Information:</h2>
                                 <hr>
                                 <div class="row">
@@ -382,16 +626,22 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <div class="form-group">
                                             <label class="pay">Salary Min</label>
                                             <input type="number" name="minimum_salary" class="form-control" placeholder="350000" />
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <div class="form-group">
                                             <label class="pay">Salary Max</label>
                                             <input type="number" name="maximum_salary" class="form-control" placeholder="500000" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2" title="This field is for click india api">
+                                        <div class="form-group">
+                                            <label class="pay">Fix Salary</label>
+                                            <input type="number" name="fix_salary" class="form-control" placeholder="500000" value="0" />
                                         </div>
                                     </div>
                                     <div class="col-sm-12">
@@ -454,140 +704,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab">
-                                <h2>Publisher Customize</h2>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="pay">Job Category</label>
-                                            <select name="click_india_job_category" class="list-dt form-control" id="click_india_job_category">
-                                                @if(count($clickIndiaJobCategory))
-                                                @foreach($clickIndiaJobCategory as $jobcategory)
-                                                <option value="{{ $jobcategory->id }}">
-                                                    {{ isset($jobcategory->category_name)?$jobcategory->category_name:'' }}
-                                                </option>
-                                                @endforeach
-                                                @endif
-                                            </select>
-                                        </div>
-                                    </div>
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="pay">Job City</label>
-                                            <select name="click_india_city_id" class="list-dt form-control" id="click_india_city_id">
-                                                @if(count($clickIndiaCity))
-                                                @foreach($clickIndiaCity as $jobcity)
-                                                <option value="{{ $jobcity->id }}">
-                                                    {{ isset($jobcity->city_name)?$jobcity->city_name:'' }}
-                                                </option>
-                                                @endforeach
-                                                @endif
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="pay">Qualification</label>
-                                            <select name="click_india_minimum_qualification" class="list-dt form-control" id="click_india_minimum_qualification">
-                                                <option value="< 10th">Below 10th</option>
-                                                <option value="10th">10th</option>
-                                                <option value="12th">12th</option>
-                                                <option value="Diploma">Diploma</option>
-                                                <option value="Bachelors" selected>Bachelors</option>
-                                                <option value="Masters">Masters</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="pay">Minimum Experience:</label>
-                                            <select name="click_india_minimum_experience" class="list-dt form-control" id="click_india_minimum_experience">
-                                                <option value="Fresher" selected>Fresher</option>
-                                                <option value="1 yr">1 yr</option>
-                                                <option value="2 yrs">2 yrs</option>
-                                                <option value="3 yrs">3 yrs</option>
-                                                <option value="4 yrs">4 yrs</option>
-                                                <option value="5 yrs">5 yrs</option>
-                                                <option value="6-9 yrs">6-9 yrs</option>
-                                                <option value="10-15 yrs">10-15 yrs</option>
-                                                <option value="15 above">15 Above</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="pay">Job Type</label>
-                                            <select name="job_type" class="list-dt form-control" id="job_type">
-                                                <option value="Full time jobs">Full time jobs
-                                                </option>
-                                                <option value="Part time jobs">Part time jobs</option>
-                                                <option value="Work from home jobs">Work from home jobs</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="pay">Salary Type</label>
-                                            <select name="salary_type" class="list-dt form-control" id="salary_type">
-                                                <option value="Per Annum">Per Annum</option>
-                                                <option value="Per Hour">Per Hour</option>
-                                                <option value="Per Day">Per Day</option>
-                                                <option value="Per Week">Per Week</option>
-                                                <option value="Per Month">Per Month</option>
-                                            </select>
-                                        </div>
-                                    </div>
 
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <label class="pay">Working Day</label>
-                                            <div class="row">
-                                                <div class="col-1">
-                                                    Mon <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Mon" checked>
-                                                </div>
-                                                <div class="col-1">
-                                                    Tue <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Tue" checked>
-                                                </div>
-                                                <div class="col-1">
-                                                    Wed <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Wed" checked>
-                                                </div>
-                                                <div class="col-1">
-                                                    Thu <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Thu" checked>
-                                                </div>
-                                                <div class="col-1">
-                                                    Fri <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Fri" checked>
-                                                </div>
-                                                <div class="col-1">
-                                                    Sat <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Sat">
-                                                </div>
-                                                <div class="col-1">
-                                                    Sun <input type="checkbox" name="click_india_working_days[]" id="click_india_working_days" value="Sun">
-                                                </div>
-                                            </div>
 
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="pay">Required Candidate:</label>
-                                            <select name="click_india_required_candidate" class="list-dt form-control" id="click_india_required_candidate">
-                                                <option value="Male / Female" selected>Male / Female</option>
-                                                <option value="Male only">Male only</option>
-                                                <option value="Female only">Female only</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="pay">Hiring Process:</label>
-                                            <input type="text" class="form-control" name="click_india_hiring_process" id="click_india_hiring_process" placeholder="Telephonic, Walkin,Written test, Group Discussion, Interview" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div style="overflow:auto;">
                                 <div style="float:right;">
                                     <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
@@ -596,6 +715,7 @@
                             </div>
                             <!-- Circles which indicates the steps of the form: -->
                             <div style="text-align:center;margin-top:40px;">
+                                <span class="step"></span>
                                 <span class="step"></span>
                                 <span class="step"></span>
                                 <span class="step"></span>
@@ -674,6 +794,55 @@
                                 }
                                 //... and adds the "active" class on the current step:
                                 x[n].className += " active";
+                            }
+                        </script>
+
+                        <script>
+                            $(function() {
+                                getCityNameField(0);
+                            });
+
+                            function getCityNameField(city_id_value) {
+                                if (city_id_value != 0) {
+                                    $('#click_india_city_name_field').hide();
+                                } else {
+                                    $('#click_india_city_name_field').show();
+                                }
+                            }
+                        </script>
+
+                        <script>
+                            function getIndustryCategoryFunction(monster_industry_id) {
+                                if (monster_industry_id) {
+                                    $.get("{{ url('getIndustryCategoryFunction') }}", {
+                                        monster_industry_id: monster_industry_id,
+                                    }, function(response) {
+                                        // console.log(response);
+                                        $('#category_funcion_div').html(response);
+                                    });
+                                }
+                            }
+
+                            function getCategoryRole(monster_category_function_id) {
+                                if (monster_category_function_id) {
+                                    $.get("{{ url('getCategoryRole') }}", {
+                                        monster_category_function_id: monster_category_function_id,
+                                    }, function(response) {
+                                        console.log(response);
+                                        $('#category_role_div').html(response);
+                                    });
+                                }
+                            }
+
+                            function getMonsterEducationStream(monster_education_level_id) {
+                                if (monster_education_level_id) {
+                                    $.get("{{ url('getMonsterEducationStream') }}", {
+                                        monster_education_level_id: monster_education_level_id,
+                                    }, function(response) {
+                                        console.log(response);
+                                        $('#monster_education_stream_div').html(response);
+                                    });
+                                }
                             }
                         </script>
                     </div>

@@ -6,6 +6,8 @@ use App\SocialCrendential;
 use App\SocialPost;
 use Exception;
 use Facebook;
+use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Exceptions\FacebookSDKException;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
@@ -18,24 +20,37 @@ class SocialPostController extends Controller
      */
     public function index()
     {
-        $fb = new Facebook\Facebook([
-            'app_id' => '933267967093222',
-            'app_secret' => '7e71cc291d69cb7ef859da081e8b309e',
-            'default_graph_version' => 'v2.10',
+        // $fb = new Facebook\Facebook([
+        //     'app_id' => '262020878256341',
+        //     'app_secret' => '4a31f7a7978de2c9f2fe3a715f78064f',
+        //     'default_graph_version' => 'v2.10',
+        // ]);
+
+        $fb = new \Facebook\Facebook([
+            'app_id' => '700413484027698',
+            'app_secret' => 'c65e5e4208e17a1954132f9df5c49c22',
+            'default_graph_version' => 'v2.10'
         ]);
+        // $fb = new \Facebook\Facebook([
+        //     'app_id' => '933267967093222',
+        //     'app_secret' => '7e71cc291d69cb7ef859da081e8b309e',
+        //     'default_graph_version' => 'v2.10'
+        // ]);
 
+        // Testing Saisun Happiest Resume APP Details Below
+
+        // 'app_id' => '700413484027698',
+        // 'app_secret' => 'c65e5e4208e17a1954132f9df5c49c22',
         $helper = $fb->getRedirectLoginHelper();
+        // $permissions = ['email', 'manage_pages']; // Optional permissions
+        $permissions = ['email']; // Optional permissions
+        $facebook_url = $helper->getLoginUrl('http://localhost:8000/callback/facebook', $permissions);
 
-        $permissions = ['email', 'manage_pages']; // Optional permissions
-        $loginUrl = $helper->getLoginUrl('http://localhost:1234/callback/facebook', $permissions);
-        // $loginUrl = $helper->getLoginUrl('https://example.com/fb-callback.php', $permissions);
-
+        // dd($facebook_url);
         $state = substr(str_shuffle("0123456789abcHGFRlki"), 0, 10);
         $linkedin_url = "https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=" . LinkedIn_CLIENT_ID . "&redirect_uri=" . LinkedIn_REDIRECT_URI . "&scope=" . LinkedIn_SCOPES . "&state=" . $state;
 
-
-        // dd($url);
-        return view('backend.publish.socialpost', compact('loginUrl', 'linkedin_url'));
+        return view('backend.publish.socialpost', compact('linkedin_url', 'facebook_url'));
     }
 
     /**
@@ -56,6 +71,7 @@ class SocialPostController extends Controller
      */
     public function store(Request $request)
     {
+        $arr_success =  [];
         foreach ($request->media as $key => $value) {
             if ($value == 'linkedin') {
                 $SocialCrendential = SocialCrendential::where('social_plateform_name', $value)->first();
@@ -73,44 +89,64 @@ class SocialPostController extends Controller
 
                     $this->sendLinkedInPost($request->message, $SocialCrendential->access_token);
                     session()->put('linkedin_profile_id', $linkedin_profile_id);
+                    $LinkedIn = 'LinkedIn';
+                    $arr_success = $LinkedIn;
 
-                    return redirect('social-group')->with('success', 'LinkedIn message has been posted successfully !!');
+                    dump('LinkedIn message has been posted successfully !!');
+                    // return redirect('social-group')->with('success', 'LinkedIn message has been posted successfully !!');
                 } catch (Exception $e) {
                     // return redirect('social-group')->with('error', 'LinkedIn message can not be posted !!');
                     echo $e->getMessage();
                 }
                 //Ends, this code has to be placed somewhere else
+
             }
             // dd('bahar hai');
-            return redirect('social-group')->with('error', 'Message can not be posted !!');
+            if ($value == 'facebook'); {
+                // dd($_REQUEST);
+                $social_crendential = SocialCrendential::where('social_plateform_name', 'facebook')->first();
+                if (!is_null($social_crendential->access_token)) {
+                    $message = $request->message;
+                    $FBObject = new \Facebook\Facebook([
+                        'app_id' => '700413484027698',
+                        'app_secret' => 'c65e5e4208e17a1954132f9df5c49c22',
+                        'default_graph_version' => 'v2.10'
+                    ]);
+                    $group_id = '539352470304280';
+
+                    $handler = $FBObject->getRedirectLoginHelper();
+                    try {
+                        // Returns a `Facebook\FacebookResponse` object
+                        $response = $FBObject->post(
+                            '/' . $group_id . '/feed',
+                            array(
+                                'message' => $message,
+                            ),
+                            $social_crendential->access_token
+                        );
+                        $graphNode = $response->getGraphNode();
+                        $Facebook = 'Facebook';
+                        $arr_success = $Facebook;
+
+                        dump('Message Has Been Posted in Facebook Group Successfully !!');
+                        // return 1;
+                        // return redirect()->back()->with('success','Job Has Been Posted in Facebook Group Successfully !!);
+                    } catch (FacebookResponseException $e) {
+                        dump($e->getMessage());
+                        // echo 'Graph returned an error: ' . $e->getMessage();
+                        // exit;
+                    } catch (FacebookSDKException $e) {
+                        dump($e->getMessage());
+                        // echo 'Facebook SDK returned an error: ' . $e->getMessage();
+                        // exit;
+                    }
+                }
+            }
+
+            // dd(explode(',', $arr_success));
+            return redirect()->back()->with('error', 'Message has been posted successfully !!');
         }
-        $fb = new Facebook\Facebook([
-            'app_id' => '933267967093222',
-            'app_secret' => '7e71cc291d69cb7ef859da081e8b309e',
-            'default_graph_version' => 'v2.10',
-        ]);
-
-        $linkData = [
-            'link' => 'http://www.example.com',
-            'message' => 'User provided message',
-        ];
-
-        try {
-            // Returns a `Facebook\Response` object
-            // $response = $fb->post('/me/feed', $linkData, 'EAAEJCsDE0hgBAKtUDfZBHZA3a0Eiz7ZA6TDEiAJTGBuxUrcNM82StruZCbbVW5QG8yr7ra2VNT8I0bRp8al80MOWxidOVdHTQS1ZAqx24aFAKba6iVE1aGtxuqiQCOhk1dpGrnRct1Na6nxwS9LSXvOt51ciLGU5k9tdvZCWHiL0HFgC0IEQl7Cp4yN2qRPAZAVx9xF80PVuegHh3RyZCbYXCoZB3JuBCIdw0NJL4WSLTsAZDZD');
-            dd(session('token'));
-            $response = $fb->post('/me/feed', $linkData, session('token'));
-        } catch (Facebook\Exception\ResponseException $e) {
-            echo 'Graph returned an error: ' . $e->getMessage();
-            exit;
-        } catch (Facebook\Exception\SDKException $e) {
-            echo 'Facebook SDK returned an error: ' . $e->getMessage();
-            exit;
-        }
-
-        $graphNode = $response->getGraphNode();
-
-        echo 'Posted with id: ' . $graphNode['id'];
+        return redirect()->back()->with('error', 'Message can not be posted, Please select social platform to post !!');
     }
 
     public function sendLinkedInPost($message, $access_token)

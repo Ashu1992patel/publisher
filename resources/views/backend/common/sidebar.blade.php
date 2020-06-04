@@ -23,6 +23,12 @@
                 </a>
             </li>
             <li>
+                <a class="sidebar-header" href="{{ url('job/format') }}" target="_blank">
+                    <i data-feather="tag" ></i>
+                    <span>XML Job Format</span>
+                </a>
+            </li>
+            <li>
                 <a class="sidebar-header {{ \Request::is('position')?'active':'' }}" href="{{ url('position') }}">
                     <i data-feather="user"></i>
                     <span>Post Jobs Position</span>

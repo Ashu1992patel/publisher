@@ -7,10 +7,14 @@ use App\ClickIndiaJobCategory;
 use App\Company;
 use App\Job;
 use App\JobPosition;
+use App\MonsterEducationLevel;
+use App\MonsterIndustryCategoryMapping;
+use App\MonsterLocation;
 use App\SocialCrendential;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Client;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class JobPositionController extends Controller
@@ -24,10 +28,20 @@ class JobPositionController extends Controller
     {
         // return view('backend.client.clickindia');
         // return view('backend.jobs.job_post_gull');
-        $clickIndiaCity = ClickIndiaCity::get();
-        $clickIndiaJobCategory = ClickIndiaJobCategory::get();
-        $companies = Company::get();
-        return view('backend.jobs.job_post', compact('clickIndiaCity', 'clickIndiaJobCategory', 'companies'));
+        $clickIndiaCity = ClickIndiaCity::cursor();
+        $clickIndiaJobCategory = ClickIndiaJobCategory::cursor();
+        $companies = Company::cursor();
+
+        $monster_industrycategorymappings = MonsterIndustryCategoryMapping::cursor();
+        $monster_locations = MonsterLocation::cursor();
+        $monster_education_levels = MonsterEducationLevel::cursor();
+        $collection = new Collection($monster_industrycategorymappings);
+
+        // Get all unique items.
+        $monster_industries = $collection->unique('industry_id');
+        $monster_categoryfuntion = $collection->unique('category_function_id');
+        // dd($monster_industrycategorymappings->count());
+        return view('backend.jobs.job_post', compact('clickIndiaCity', 'clickIndiaJobCategory', 'companies', 'monster_industries', 'monster_categoryfuntion', 'monster_locations', 'monster_education_levels'));
     }
 
     /**
@@ -57,56 +71,73 @@ class JobPositionController extends Controller
         //         $eduQualification .= $value . ', ';
         // }
 
-        // dd($_REQUEST);
 
         // dd(json_encode(request('click_india_working_days')));
-
+        // dd($_REQUEST);
         $commonController = new CommonController();
 
-        $job = new Job();
-        $job->job_title = request('job_title');
-        $job->designation = request('designation');
-        $job->expire_on = Carbon::parse(request('expire_on'))->format('Y-m-d');
-        // $job->expire_on = Carbon::parse('2021-01-31')->format('Y-m-d');
-        $job->job_type = request('job_type');
-        $job->vacancies = request('vacancies');
-        $job->salary_type = request('salary_type');
-        $job->minimum_salary = request('minimum_salary');
-        $job->maximum_salary = request('maximum_salary');
-        $job->job_description = request('job_description');
-        $job->company_id = request('company_id');
-        $job->company_url = request('company_url');
-        $job->company_location = request('company_location');
-        $job->apply_button_url = request('apply_button_url');
-        $job->other = request('other');
-        $job->skills = request('skills');
-        $job->company_description = request('company_description');
-        $job->click_india_job_category_id = request('click_india_job_category_id');
-        $job->click_india_city_id = request('click_india_city_id');
-        $job->click_india_minimum_qualification = request('click_india_minimum_qualification');
-        $job->click_india_minimum_experience = request('click_india_minimum_experience');
-        $job->click_india_working_days = json_encode(request('click_india_working_days'));
-        $job->click_india_required_candidate = request('click_india_required_candidate');
-        $job->click_india_hiring_process = request('click_india_hiring_process');
-        $job->is_active = request('is_active');
-        $job->save();
+        $job = $commonController->storeJobs();
+        if (!$job->id) {
+            return redirect()->back()->with('success', 'Oops!! something went wrong, please try again later !!');
+        }
 
+        if (!is_null(request('monster'))) {
+            $monster_job_status = $commonController->sendToMonster($job->id);
+        }
+        dd($_REQUEST);
 
         if (!is_null(request('clickindia'))) {
-            // dd($job->click_india_minimum_qualification);
             $click_india_job_status = $commonController->sendToClickIndia($job->id);
-
-            // dd('CI Status: ' . $click_india_job_status);
         }
-        // dd(!is_null(request('linkedin')));
 
         if (!is_null(request('linkedin'))) {
-            $message = 'Company Name: ' . $job->company->name . 'City: ' . $job->click_india_city->city_name . 'Position Name: ' . $job->designation . 'Job Expire Date: ' . $job->expire_on . 'openings: ' . $job->vacancies . 'Company Location: ' . $job->company_location . 'Required Skills: ' . $job->skills . 'Job Description: ' . $job->job_description . 'Min Experience: ' . $job->click_india_minimum_experience . 'Qualification: ' . $job->click_india_minimum_qualification . 'Min Salary: ' . $job->minimum_salary . 'Max Salary: ' . $job->maximum_salary . 'Job Type: ' . $job->job_type;
+            if (!is_null($job->click_india_city_name)) {
+                $message = '
+                Company Name: ' . $job->company->name . '
+                City: ' . $job->click_india_city_name . '
+                Job Title: ' . $job->job_title . '
+                Position Name: ' . $job->designation . '
+                Skills Required: ' . $job->skills . '
+                Job Expire Date: ' . $job->expire_on . '
+                Openings: ' . $job->vacancies . '
+                Company Location: ' . $job->company_location . '
+                Required Skills: ' . $job->skills . '
+                Job Description: ' . $job->job_description . '
+                Min Experience: ' . $job->click_india_minimum_experience . '
+                Fix Salary: ' . $job->fix_salary . '
+                Min. Salary: ' . $job->minimum_salary . '
+                Max. Salary: ' . $job->maximum_salary . '
+                Job Type: ' . $job->job_type . '
+                Apply Now: ' . $job->apply_button_url . '
+                Company URL: ' . $job->company_url;
+            } else {
+                $message = '
+                Company Name: ' . $job->company->name . '
+                City: ' . $job->click_india_city->city_name . '
+                Job Title: ' . $job->job_title . '
+                Position Name: ' . $job->designation . '
+                Skills Required: ' . $job->skills . '
+                Job Expire Date: ' . $job->expire_on . '
+                openings: ' . $job->vacancies . '
+                Company Location: ' . $job->company_location . '
+                Required Skills: ' . $job->skills . '
+                Job Description: ' . $job->job_description . '
+                Min Experience: ' . $job->click_india_minimum_experience . '
+                Fix Salary: ' . $job->fix_salary . '
+                Min. Salary: ' . $job->minimum_salary . '
+                Max. Salary: ' . $job->maximum_salary . '
+                Job Type: ' . $job->job_type . '
+                Apply Now: ' . $job->apply_button_url . '
+                Company URL: ' . $job->company_url;
+            }
 
-            // dd($message);
+            // if (!is_null(request('click_india_city_name'))) {
+            //     $message = 'Company Name: ' . $job->company->name . 'City: ' . $job->click_india_city_name . 'Position Name: ' . $job->designation . 'Job Expire Date: ' . $job->expire_on . 'openings: ' . $job->vacancies . 'Company Location: ' . $job->company_location . 'Required Skills: ' . $job->skills . 'Job Description: ' . $job->job_description . 'Min Experience: ' . $job->click_india_minimum_experience . 'Qualification: ' . $job->click_india_minimum_qualification . 'Min Salary: ' . $job->minimum_salary . 'Max Salary: ' . $job->maximum_salary . 'Job Type: ' . $job->job_type;
+            // } else {
+            //     $message = 'Company Name: ' . $job->company->name . 'City: ' . $job->click_india_city->city_name . 'Position Name: ' . $job->designation . 'Job Expire Date: ' . $job->expire_on . 'openings: ' . $job->vacancies . 'Company Location: ' . $job->company_location . 'Required Skills: ' . $job->skills . 'Job Description: ' . $job->job_description . 'Min Experience: ' . $job->click_india_minimum_experience . 'Qualification: ' . $job->click_india_minimum_qualification . 'Min Salary: ' . $job->minimum_salary . 'Max Salary: ' . $job->maximum_salary . 'Job Type: ' . $job->job_type;
+            // }
 
             $SocialCrendential = SocialCrendential::where('social_plateform_name', 'linkedin')->first();
-
 
             try {
                 $client = new Client(['base_uri' => 'https://api.linkedin.com']);
@@ -123,14 +154,12 @@ class JobPositionController extends Controller
 
                 session()->put('linkedin_profile_id', $linkedin_profile_id);
 
-                dd(session('linkedin_profile_id'));
                 return redirect()->back()->with('success', 'LinkedIn message has been posted successfully !!');
             } catch (Exception $e) {
                 // return redirect('social-group')->with('error', 'LinkedIn message can not be posted !!');
                 echo $e->getMessage();
             }
         }
-        dd('AP');
 
         return redirect()->back()->with('success', 'Job position has been saved & posted to linkedin successfully !!');
     }
@@ -141,27 +170,56 @@ class JobPositionController extends Controller
      * @param  \App\JobPosition  $jobPosition
      * @return \Illuminate\Http\Response
      */
-    public function show(JobPosition $jobPosition, $id)
+    public function show($id)
     {
+        // dd($id);
         // $JobPosition = JobPosition::find($id);
         // $position = JobPosition::find($id);
         $job = Job::find($id);
+        session()->put('job', $job);
 
         $commonController  = new CommonController();
         $click_india_job_status = $commonController->sendToClickIndia($job->id);
 
-        $message = '
-        Company Name: ' . $job->company->name . '
-        City: ' . $job->click_india_city->city_name . '
-        Position Name: ' . $job->designation . '
-        Job Expire Date: ' . $job->expire_on . '
-        openings: ' . $job->vacancies . '
-        Company Location: ' . $job->company_location . '
-        Required Skills: ' . $job->skills . '
-        Job Description: ' . $job->job_description . '
-        Min Experience: ' . $job->click_india_minimum_experience . '
-        Max Salary: ' . $job->maximum_salary . '
-        Job Type: ' . $job->job_type;
+        if (!is_null($job->click_india_city_name)) {
+            $message = '
+            Company Name: ' . $job->company->name . '
+            City: ' . $job->click_india_city_name . '
+            Job Title: ' . $job->job_title . '
+            Position Name: ' . $job->designation . '
+            Skills Required: ' . $job->skills . '
+            Job Expire Date: ' . $job->expire_on . '
+            openings: ' . $job->vacancies . '
+            Company Location: ' . $job->company_location . '
+            Required Skills: ' . $job->skills . '
+            Job Description: ' . $job->job_description . '
+            Min Experience: ' . $job->click_india_minimum_experience . '
+            Fix Salary: ' . $job->fix_salary . '
+            Min. Salary: ' . $job->minimum_salary . '
+            Max. Salary: ' . $job->maximum_salary . '
+            Job Type: ' . $job->job_type . '
+            Apply Now: ' . $job->apply_button_url . '
+            Company URL: ' . $job->company_url;
+        } else {
+            $message = '
+            Company Name: ' . $job->company->name . '
+            City: ' . $job->click_india_city->city_name . '
+            Job Title: ' . $job->job_title . '
+            Position Name: ' . $job->designation . '
+            Skills Required: ' . $job->skills . '
+            Job Expire Date: ' . $job->expire_on . '
+            openings: ' . $job->vacancies . '
+            Company Location: ' . $job->company_location . '
+            Required Skills: ' . $job->skills . '
+            Job Description: ' . $job->job_description . '
+            Min Experience: ' . $job->click_india_minimum_experience . '
+            Fix Salary: ' . $job->fix_salary . '
+            Min. Salary: ' . $job->minimum_salary . '
+            Max. Salary: ' . $job->maximum_salary . '
+            Job Type: ' . $job->job_type . '
+            Apply Now: ' . $job->apply_button_url . '
+            Company URL: ' . $job->company_url;
+        }
 
         // $message = '
         // Client: ' . $JobPosition->clientId . '
@@ -259,8 +317,12 @@ class JobPositionController extends Controller
      * @param  \App\JobPosition  $jobPosition
      * @return \Illuminate\Http\Response
      */
-    public function destroy(JobPosition $jobPosition)
+    public function destroy(JobPosition $jobPosition, $id)
     {
-        //
+        $job = Job::find($id);
+        if ($job->delete()) {
+            return redirect()->back()->with('success', 'Job has been deleted from the server');
+        }
+        return redirect()->back()->with('error', 'Something went wrong !!');
     }
 }

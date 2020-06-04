@@ -40,8 +40,13 @@
                             <div class="icons-widgets col-4">
                                 <div class="align-self-center text-center"><i data-feather="navigation" class="font-warning"></i></div>
                             </div>
-                            <div class="media-body col-8"><span class="m-0">Earnings</span>
-                                <h3 class="mb-0">$ <span class="counter">6659</span><small> This Month</small></h3>
+                            <div class="media-body col-8"><span class="m-0">Jobs</span>
+                                <h3 class="mb-0">
+                                    <span class="counter">
+                                        {{$jobs->count()}}
+                                    </span>
+                                    <small> Total Count</small>
+                                </h3>
                             </div>
                         </div>
                     </div>
@@ -54,8 +59,13 @@
                             <div class="icons-widgets col-4">
                                 <div class="align-self-center text-center"><i data-feather="box" class="font-secondary"></i></div>
                             </div>
-                            <div class="media-body col-8"><span class="m-0">Products</span>
-                                <h3 class="mb-0">$ <span class="counter">9856</span><small> This Month</small></h3>
+                            <div class="media-body col-8"><span class="m-0">Jobs</span>
+                                <h3 class="mb-0">
+                                    <span class="counter">
+                                        {{ $jobs->where('created_at', now())->count() }}
+                                    </span>
+                                    <small> Today</small>
+                                </h3>
                             </div>
                         </div>
                     </div>
@@ -68,8 +78,13 @@
                             <div class="icons-widgets col-4">
                                 <div class="align-self-center text-center"><i data-feather="message-square" class="font-primary"></i></div>
                             </div>
-                            <div class="media-body col-8"><span class="m-0">Messages</span>
-                                <h3 class="mb-0">$ <span class="counter">893</span><small> This Month</small></h3>
+                            <div class="media-body col-8"><span class="m-0">Jobs</span>
+                                <h3 class="mb-0">
+                                    <span class="counter">
+                                        {{ $jobs->where('created_at', now())->count() }}
+                                    </span>
+                                    <small> This Month</small>
+                                </h3>
                             </div>
                         </div>
                     </div>
@@ -82,8 +97,13 @@
                             <div class="icons-widgets col-4">
                                 <div class="align-self-center text-center"><i data-feather="users" class="font-danger"></i></div>
                             </div>
-                            <div class="media-body col-8"><span class="m-0">New Vendors</span>
-                                <h3 class="mb-0">$ <span class="counter">45631</span><small> This Month</small></h3>
+                            <div class="media-body col-8"><span class="m-0">New Jobs</span>
+                                <h3 class="mb-0">
+                                    <span class="counter">
+                                        {{ $jobs->where('created_at', now())->count() }}
+                                    </span>
+                                    <small> Today</small>
+                                </h3>
                             </div>
                         </div>
                     </div>
@@ -137,9 +157,20 @@
                                     @foreach($jobs as $key=>$jobPosition)
                                     <tr>
                                         <td>
-                                            <a href="{{ url('position/').'/'.$jobPosition->id }}" class="btn btn-sm btn-info">
-                                                Post Now
-                                            </a>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <a href="{{ url('position/').'/'.$jobPosition->id }}" class="btn btn-sm btn-info">
+                                                        Post Now
+                                                    </a>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <form action="{{ url('position/').'/'.$jobPosition->id }}" method="post" id="form{{$jobPosition->id}}">
+                                                        @method('DELETE')
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-warning" onclick='getConfirmed("{{$jobPosition->job_title}}, {{$jobPosition->id}}");'>Delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </td>
                                         <td>{{ ++$key }}</td>
                                         <td>{{ isset($jobPosition->company->name)?$jobPosition->company->name:'' }}</td>
@@ -281,6 +312,16 @@
         @include('backend.common.footer')
         <!-- footer end-->
     </div>
+    <script>
+        function getConfirmed(job_title, id) {
+            if (confirm('Are you want to delete this position ??')) {
+                $('.form'.id).submit();
+            } else {
+
+            }
+        }
+    </script>
+
 
 </div>
 

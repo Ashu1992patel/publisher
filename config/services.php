@@ -36,4 +36,11 @@ return [
         'redirect' => env('FB_REDIRECT'),
     ],
 
+    'linkedin' => [
+        'linkedin_client_id' => env('LINKEDIN_CLIENT_ID'),         // Your linkedin Client ID
+        'linkedin_client_secret' => env('LINKEDIN_CLIENT_SECRET'), // Your linkedin Client Secret
+        'linkedin_redirect' => env('LINKEDIN_REDIRECT'),
+        'linkedin_scope' => env('LINKEDIN_SCOPES'),
+    ],
+
 ];

@@ -70,7 +70,8 @@
                                                     <!-- <a href="{{ url('redirect/facebook') }}" target="_blank">
                                                         Facebook
                                                     </a> -->
-                                                    <a href="{{ $loginUrl }}" target="_blank">
+                                                    <a href="{{ $facebook_url }}" target="_blank">
+                                                        <!-- <a href="{{ url('redirect/facebook') }}" target="_blank"> -->
                                                         Facebook
                                                     </a>
                                                 </label>

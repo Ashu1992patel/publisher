@@ -31,10 +31,75 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $jobPositions = JobPosition::get();
-        $jobs = Job::orderBy('id', 'desc')->get();
+        $jobPositions = JobPosition::orderBy('id', 'desc')->cursor();
+        $jobs = Job::orderBy('id', 'desc')->cursor();
         return view('backend.dashboard', compact('jobPositions', 'jobs'));
         return view('home');
+    }
+
+
+
+    public function sendLinkedInPost()
+    {
+        // $link = 'YOUR_LINK_TO_SHARE';
+        $link = LinkedIn_REDIRECT_URI;
+        $access_token = session('access_token');
+        $linkedin_id = session('linkedin_profile_id');
+        $body = new \stdClass();
+        $body->content = new \stdClass();
+        $body->content->contentEntities[0] = new \stdClass();
+        $body->text = new \stdClass();
+        $body->content->contentEntities[0]->thumbnails[0] = new \stdClass();
+        $body->content->contentEntities[0]->entityLocation = $link;
+        $body->content->contentEntities[0]->thumbnails[0]->resolvedUrl = "THUMBNAIL_URL_TO_POST";
+        $body->content->title = 'YOUR_POST_TITLE';
+        $body->owner = 'urn:li:person:' . $linkedin_id;
+        $body->text->text = 'Server Test API Successfull AP ';
+        $body_json = json_encode($body, true);
+
+        try {
+            $client = new Client(['base_uri' => 'https://api.linkedin.com']);
+            $response = $client->request('POST', '/v2/shares', [
+                'headers' => [
+                    "Authorization" => "Bearer " . $access_token,
+                    "Content-Type"  => "application/json",
+                    "x-li-format"   => "json"
+                ],
+                'body' => $body_json,
+            ]);
+
+            if ($response->getStatusCode() !== 201) {
+                echo 'Error: ' . $response->getLastBody()->errors[0]->message;
+            }
+
+            echo 'Post is shared on LinkedIn successfully';
+        } catch (Exception $e) {
+            echo $e->getMessage() . ' for link ' . $link;
+        }
+    }
+
+    public function redirect($service)
+    {
+        // dd($service);
+        if ($service == 'facebook') {
+            return FacadesSocialite::driver($service)->redirect();
+            $FBObject = new \Facebook\Facebook([
+                'app_id' => '700413484027698',
+                'app_secret' => 'c65e5e4208e17a1954132f9df5c49c22',
+                'default_graph_version' => 'v2.10'
+            ]);
+
+            $handler = $FBObject->getRedirectLoginHelper();
+
+            $redirectTo = "http://localhost/Facebook-Login/callback.php";
+            $data = ['email'];
+
+            $fullURL = $handler->getLoginUrl($redirectTo, $data);
+
+            header("Location: " . $fullURL);
+            exit();
+        }
+        // return FacadesSocialite::driver('facebook')->redirect();
     }
 
     public function callback($service)
@@ -108,130 +173,50 @@ class HomeController extends Controller
             }
         }
         if ($service == 'facebook') {
-            $fb = new Facebook\Facebook([
-                'app_id' => '933267967093222',
-                'app_secret' => '7e71cc291d69cb7ef859da081e8b309e',
-                'default_graph_version' => 'v2.10',
-            ]);
 
-            $helper = $fb->getRedirectLoginHelper();
-
-            try {
-                $accessToken = $helper->getAccessToken();
-                // dd($accessToken);
-                session()->put('token', $accessToken);
-                return redirect('social-group');
-            } catch (Facebook\Exception\ResponseException $e) {
-                // When Graph returns an error
-                echo 'Graph returned an error: ' . $e->getMessage();
-                exit;
-            } catch (Facebook\Exception\SDKException $e) {
-                // When validation fails or other local issues
-                echo 'Facebook SDK returned an error: ' . $e->getMessage();
-                exit;
-            }
-
-            if (!isset($accessToken)) {
-                if ($helper->getError()) {
-                    header('HTTP/1.0 401 Unauthorized');
-                    echo "Error: " . $helper->getError() . "\n";
-                    echo "Error Code: " . $helper->getErrorCode() . "\n";
-                    echo "Error Reason: " . $helper->getErrorReason() . "\n";
-                    echo "Error Description: " . $helper->getErrorDescription() . "\n";
-                } else {
-                    header('HTTP/1.0 400 Bad Request');
-                    echo 'Bad request';
-                }
-                exit;
-            }
-
-            // Logged in
-            echo '<h3>Access Token</h3>';
-            var_dump($accessToken->getValue());
-
-            // The OAuth 2.0 client handler helps us manage access tokens
-            $oAuth2Client = $fb->getOAuth2Client();
-
-            // Get the access token metadata from /debug_token
-            $tokenMetadata = $oAuth2Client->debugToken($accessToken);
-            echo '<h3>Metadata</h3>';
-            var_dump($tokenMetadata);
-
-            // Validation (these will throw FacebookSDKException's when they fail)
-            $tokenMetadata->validateAppId($config['app_id']);
-            // If you know the user ID this access token belongs to, you can validate it here
-            //$tokenMetadata->validateUserId('123');
-            $tokenMetadata->validateExpiration();
-
-            if (!$accessToken->isLongLived()) {
-                // Exchanges a short-lived access token for a long-lived one
-                try {
-                    $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
-                } catch (Facebook\Exception\SDKException $e) {
-                    echo "<p>Error getting long-lived access token: " . $e->getMessage() . "</p>\n\n";
-                    exit;
-                }
-
-                echo '<h3>Long-lived</h3>';
-                var_dump($accessToken->getValue());
-            }
-
-            $_SESSION['fb_access_token'] = (string) $accessToken;
-
-
-
-            // $user = FacadesSocialite::driver($service)->user();
-
-            // if ($user) {
-            //     session()->put('token', $user->token);
+            // dd($_REQUEST);
+            // if (!session_id()) {
+            //     session_start();
             // }
-            return redirect('social-group');
-        }
-    }
+            try {
+                $FBObject = new \Facebook\Facebook([
+                    'app_id' => '700413484027698',
+                    'app_secret' => 'c65e5e4208e17a1954132f9df5c49c22',
+                    'default_graph_version' => 'v2.10'
+                ]);
+
+                $handler = $FBObject->getRedirectLoginHelper();
+
+                if (isset($_GET['state'])) {
+                    $handler->getPersistentDataHandler()->set('state', $_GET['state']);
+                }
+                $accessToken = $handler->getAccessToken();
+                session()->put('access_token', (string) $accessToken);
 
 
-    public function sendLinkedInPost()
-    {
-        // $link = 'YOUR_LINK_TO_SHARE';
-        $link = LinkedIn_REDIRECT_URI;
-        $access_token = session('access_token');
-        $linkedin_id = session('linkedin_profile_id');
-        $body = new \stdClass();
-        $body->content = new \stdClass();
-        $body->content->contentEntities[0] = new \stdClass();
-        $body->text = new \stdClass();
-        $body->content->contentEntities[0]->thumbnails[0] = new \stdClass();
-        $body->content->contentEntities[0]->entityLocation = $link;
-        $body->content->contentEntities[0]->thumbnails[0]->resolvedUrl = "THUMBNAIL_URL_TO_POST";
-        $body->content->title = 'YOUR_POST_TITLE';
-        $body->owner = 'urn:li:person:' . $linkedin_id;
-        $body->text->text = 'Server Test API Successfull AP ';
-        $body_json = json_encode($body, true);
+                // dd($data);
+                $SocialCrendential = SocialCrendential::where('social_plateform_name', 'facebook')->first();
+                if ($SocialCrendential) {
+                    $SocialCrendential->access_token = (string) $accessToken; // store this token somewhere
+                    // $SocialCrendential->expires_in = $data['expires_in']; // store this token somewhere
+                    $SocialCrendential->save();
+                } else {
+                    $SocialCrendential = new SocialCrendential();
+                    $SocialCrendential->social_plateform_name = 'facebook';
+                    $SocialCrendential->access_token = (string) $accessToken; // store this token somewhere
+                    // $SocialCrendential->expires_in = $data['expires_in']; // store this token somewhere
+                    $SocialCrendential->save();
+                }
 
-        try {
-            $client = new Client(['base_uri' => 'https://api.linkedin.com']);
-            $response = $client->request('POST', '/v2/shares', [
-                'headers' => [
-                    "Authorization" => "Bearer " . $access_token,
-                    "Content-Type"  => "application/json",
-                    "x-li-format"   => "json"
-                ],
-                'body' => $body_json,
-            ]);
-
-            if ($response->getStatusCode() !== 201) {
-                echo 'Error: ' . $response->getLastBody()->errors[0]->message;
+                dump('Access Token Has Been Generated Successfully !!');
+                echo "<script>window.close();</script>";
+            } catch (\Facebook\Exceptions\FacebookResponseException $e) {
+                echo "Response Exception: " . $e->getMessage();
+                exit();
+            } catch (\Facebook\Exceptions\FacebookSDKException $e) {
+                echo "SDK Exception: " . $e->getMessage();
+                exit();
             }
-
-            echo 'Post is shared on LinkedIn successfully';
-        } catch (Exception $e) {
-            echo $e->getMessage() . ' for link ' . $link;
         }
-    }
-
-    public function redirect($service)
-    {
-        // dd($service);
-        return FacadesSocialite::driver('facebook')->redirect();
     }
 }
