@@ -16,6 +16,10 @@ de=<?php
             Schema::create('job_to_click_indias', function (Blueprint $table) {
                 $table->id();
                 $table->integer('job_id')->nullable();
+                $table->integer('response')->nullable();
+                $table->integer('views')->nullable();
+                $table->tinyInteger('is_posted')->nullable();
+                $table->integer('update_count')->nullable();
                 $table->timestamps();
             });
         }

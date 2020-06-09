@@ -338,30 +338,134 @@
                                 <h2>Basic Details:</h2>
                                 <hr>
                                 <div class="form-group">
-
                                     <input class="radio_animated" id="edo-ani1" type="checkbox" name="linkedin" checked>Linkiden
-
                                 </div>
                                 <div class="form-group">
-
                                     <input class="radio_animated" id="edo-ani1" type="checkbox" name="clickindia">Clickindia
                                 </div>
                                 <div class="form-group">
-
-                                    <input class="radio_animated" id="edo-ani1" type="checkbox" name="monster">Monster
-
+                                    <input class="radio_animated" id="edo-ani1" type="checkbox" name="shine">Shine
                                 </div>
                                 <div class="form-group">
-
+                                    <input class="radio_animated" id="edo-ani1" type="checkbox" name="monster">Monster
+                                </div>
+                                <div class="form-group">
                                     <input class="radio_animated" id="edo-ani1" type="checkbox" name="naukri">Naukri
-
                                 </div>
                             </div>
+
+                            <div class="tab">
+                                <h2>Shine Job Posting Information:</h2>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="pay">City Group <small>(shine)</small></label>
+                                            <select name="shine_cities_groups_id" class="list-dt form-control" id="shine_cities_groups_id" onchange="getShineCity(this.value);">
+                                                <option value="0">-Select City Group-</option>
+                                                @if(count($shine_cities_groups))
+                                                @foreach($shine_cities_groups as $shine_cities_group)
+                                                <option value="{{ $shine_cities_group->city_grouping_id }}">
+                                                    {{ isset($shine_cities_group->city_grouping_desc)?$shine_cities_group->city_grouping_desc:'' }}
+                                                </option>
+                                                @endforeach
+                                                @endif
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4" id="shine_cities_id_div">
+                                        <div class="form-group">
+                                            <label class="pay">City Name<small>(shine)</small></label>
+                                            <select name="shine_cities_id" class="list-dt form-control" id="shine_cities_id">
+                                                <option value="0">-Select City Name-</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="pay">Industry <small>(shine)</small></label>
+                                            <select name="shine_industries_id" class="list-dt form-control" id="shine_industries_id">
+                                                <option value="0">-Select Industry-</option>
+                                                @if(count($shine_industries))
+                                                @foreach($shine_industries as $shine_industry)
+                                                <option value="{{ $shine_industry->industry_id }}">
+                                                    {{ isset($shine_industry->industry_desc)?$shine_industry->industry_desc:'' }}
+                                                </option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="pay">
+                                                Education Levels <small>(shine)</small>
+                                            </label>
+                                            <select name="shine_study_field_grouping_id" class="list-dt form-control" id="shine_study_field_grouping_id" onchange="getShineEducationStream(this.value);">
+                                                <option value="0">-Select Education Level-</option>
+                                                @if(count($study_field_groupings))
+                                                @foreach($study_field_groupings as $study_field_group)
+                                                <option value="{{ $study_field_group->study_field_grouping_id }}">
+                                                    {{ isset($study_field_group->study_field_grouping_desc)?$study_field_group->study_field_grouping_desc:'' }}
+                                                </option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4" id="shine_education_stream_div">
+                                        <div class="form-group">
+                                            <label class="pay">Education Stream <small>(shine)</small></label>
+                                            <select name="shine_study_id" class="list-dt form-control" id="shine_study_id">
+                                                <option value="0">-Select Education Stream-</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="pay">Functional Area <small>(shine)</small></label>
+                                            <select name="shine_functional_areas_id" class="list-dt form-control" id="shine_functional_areas_id">
+                                                <option value="0">-Select Functional Area-</option>
+                                                @if(count($shine_functional_areas))
+                                                @foreach($shine_functional_areas as $shine_functional_area)
+                                                <option value="{{ $shine_functional_area->codes }}">
+                                                    {{ isset($shine_functional_area->value)?$shine_functional_area->value:'' }}
+                                                </option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="pay">Experience Look up <small>(shine)</small></label>
+                                            <select name="shine_experience_lookups_id" class="list-dt form-control" id="shine_experience_lookups_id">
+                                                <option value="0">-Select Functional Area-</option>
+                                                @if(count($shine_experience_lookups))
+                                                @foreach($shine_experience_lookups as $shine_experience_lookup)
+                                                <option value="{{ $shine_functional_area->id }}">
+                                                    {{ isset($shine_experience_lookup->display)?$shine_experience_lookup->display:'' }}
+                                                </option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="tab">
                                 <h2>Monster Information:</h2>
                                 <hr>
                                 <div class="row">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="pay">Industry <small>(monster)</small></label>
                                             <select name="monster_industry_id" class="list-dt form-control" id="monster_industry_id" onchange="getIndustryCategoryFunction(this.value);">
@@ -378,10 +482,10 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6" id="category_funcion_div">
+                                    <div class="col-sm-4" id="category_funcion_div">
                                         <div class="form-group">
                                             <label class="pay">Category Function <small>(monster)</small></label>
-                                            <select name="category_function_id" class="list-dt form-control" id="category_function_id" onchange="getCategoryRole(this.value);">
+                                            <select name="monster_category_function_id" class="list-dt form-control" id="monster_category_function_id" onchange="getCategoryRole(this.value);">
                                                 <option value="0">-Select Category Function-</option>
                                                 @if(count($monster_categoryfuntion))
                                                 @foreach($monster_categoryfuntion as $categoryfunction)
@@ -394,17 +498,17 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6" id="category_role_div">
+                                    <div class="col-sm-4" id="category_role_div">
                                         <div class="form-group">
                                             <label class="pay">Category Roles <small>(monster)</small></label>
-                                            <select name="category_role_id" class="list-dt form-control" id="category_role_id">
+                                            <select name="monster_category_role_id" class="list-dt form-control" id="monster_category_role_id">
                                                 <option value="0">-Select Category Role-</option>
                                             </select>
                                         </div>
                                     </div>
 
 
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="pay">
                                                 Education Levels <small>(monster)</small>
@@ -422,7 +526,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-3" id="monster_education_stream_div">
+                                    <div class="col-sm-4" id="monster_education_stream_div">
                                         <div class="form-group">
                                             <label class="pay">Education Stream <small>(monster)</small></label>
                                             <select name="monster_education_stream_id" class="list-dt form-control" id="monster_education_stream_id">
@@ -431,7 +535,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="pay">
                                                 Job Location <small>(monster)</small>
@@ -448,8 +552,77 @@
                                             </select>
                                         </div>
                                     </div>
+
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label class="pay">
+                                                Min. Exp. <small>(monster)</small>
+                                            </label>
+                                            <input type="number" name="monster_minimum_experience" class="list-dt form-control" id="monster_minimum_experience">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label class="pay">
+                                                Max. Exp. <small>(monster)</small>
+                                            </label>
+                                            <input type="number" name="monster_maximum_experience" class="list-dt form-control" id="monster_maximum_experience">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label class="pay">
+                                                Company Name
+                                            </label>
+                                            <select name="monster_show_company_name" class="list-dt form-control" id="monster_show_company_name">
+                                                <option value="1">Show</option>
+                                                <option value="0">Hide</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label class="pay">
+                                                Contact Details
+                                            </label>
+                                            <select name="monster_show_contact_details" class="list-dt form-control" id="monster_show_contact_details">
+                                                <option value="1">Show</option>
+                                                <option value="0">Hide</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="pay">
+                                                Contact Person Name <small>*</small>
+                                            </label>
+                                            <input type="text" name="contact_person_name" class="list-dt form-control" id="contact_person_name">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="pay">
+                                                Person Contact <small>*</small>
+                                            </label>
+                                            <input type="text" name="person_contact" class="list-dt form-control" id="person_contact">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="pay">
+                                                Person Email <small>*</small>
+                                            </label>
+                                            <input type="text" name="person_email" class="list-dt form-control" id="person_email">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
                             <div class="tab">
                                 <h2>CLICK INDIA INFORMATION : </h2>
                                 <hr>
@@ -719,6 +892,7 @@
                                 <span class="step"></span>
                                 <span class="step"></span>
                                 <span class="step"></span>
+                                <span class="step"></span>
                             </div>
                         </form>
 
@@ -828,7 +1002,7 @@
                                     $.get("{{ url('getCategoryRole') }}", {
                                         monster_category_function_id: monster_category_function_id,
                                     }, function(response) {
-                                        console.log(response);
+                                        // console.log(response);
                                         $('#category_role_div').html(response);
                                     });
                                 }
@@ -839,10 +1013,33 @@
                                     $.get("{{ url('getMonsterEducationStream') }}", {
                                         monster_education_level_id: monster_education_level_id,
                                     }, function(response) {
-                                        console.log(response);
+                                        // console.log(response);
                                         $('#monster_education_stream_div').html(response);
                                     });
                                 }
+                            }
+
+                            function getShineEducationStream(shine_study_field_grouping_id) {
+                                if (shine_study_field_grouping_id) {
+                                    $.get("{{ url('getShineEducationStream') }}", {
+                                        shine_study_field_grouping_id: shine_study_field_grouping_id,
+                                    }, function(response) {
+                                        // console.log(response);
+                                        $('#shine_education_stream_div').html(response);
+                                    });
+                                }
+                            }
+                        </script>
+
+                        <script>
+                            function getShineCity(shine_cities_groups_id) {
+                                $.get("{{ url('getShineCity') }}", {
+                                    shine_cities_groups_id: shine_cities_groups_id,
+                                }, function(response) {
+                                    // console.log(response);
+                                    $('#shine_cities_id_div').html(response);
+                                });
+
                             }
                         </script>
                     </div>

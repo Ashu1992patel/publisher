@@ -29,6 +29,10 @@ class CreateJobsTable extends Migration
             $table->string('company_location')->nullable();
             $table->longText('company_description')->nullable();
             $table->longText('other')->nullable();
+            $table->integer('minimum_experience')->nullable();
+            $table->integer('maximum_experience')->nullable();
+            $table->tinyInteger('show_company_name')->nullable();
+            $table->tinyInteger('show_contact_details')->nullable();
             $table->longText('apply_button_url')->nullable();
             $table->integer('click_india_job_category_id')->nullable();
             $table->integer('click_india_city_id')->nullable();

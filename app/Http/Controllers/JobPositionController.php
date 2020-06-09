@@ -7,9 +7,17 @@ use App\ClickIndiaJobCategory;
 use App\Company;
 use App\Job;
 use App\JobPosition;
+use App\JobToClickIndia;
 use App\MonsterEducationLevel;
 use App\MonsterIndustryCategoryMapping;
 use App\MonsterLocation;
+use App\MonsterPostedJob;
+use App\ShineCity;
+use App\ShineDegreeLevel;
+use App\ShineExperienceLookup;
+use App\ShineFunctionalArea;
+use App\ShineIndustry;
+use App\ShineSalaryRange;
 use App\SocialCrendential;
 use Carbon\Carbon;
 use Exception;
@@ -41,7 +49,19 @@ class JobPositionController extends Controller
         $monster_industries = $collection->unique('industry_id');
         $monster_categoryfuntion = $collection->unique('category_function_id');
         // dd($monster_industrycategorymappings->count());
-        return view('backend.jobs.job_post', compact('clickIndiaCity', 'clickIndiaJobCategory', 'companies', 'monster_industries', 'monster_categoryfuntion', 'monster_locations', 'monster_education_levels'));
+
+        $shine_cities_collection = new Collection(ShineCity::orderBy('city_grouping_desc')->cursor());
+        $shine_cities_groups = $shine_cities_collection->unique('city_grouping_desc');
+        $shine_industries = ShineIndustry::orderBy('industry_desc')->cursor();
+        $shine_experience_lookups = ShineExperienceLookup::cursor();
+        $shine_salary_ranges = ShineSalaryRange::cursor();
+
+        $shine_degree_levels_collection = new Collection(ShineDegreeLevel::orderBy('study_field_grouping_id')->cursor());
+        $study_field_groupings = $shine_degree_levels_collection->unique('study_field_grouping_id');
+        $shine_functional_areas = ShineFunctionalArea::cursor();
+
+
+        return view('backend.jobs.job_post', compact('clickIndiaCity', 'clickIndiaJobCategory', 'companies', 'monster_industries', 'monster_categoryfuntion', 'monster_locations', 'monster_education_levels', 'shine_cities_groups', 'shine_industries', 'shine_experience_lookups', 'shine_salary_ranges', 'study_field_groupings', 'shine_functional_areas',));
     }
 
     /**
@@ -73,7 +93,6 @@ class JobPositionController extends Controller
 
 
         // dd(json_encode(request('click_india_working_days')));
-        // dd($_REQUEST);
         $commonController = new CommonController();
 
         $job = $commonController->storeJobs();
@@ -81,12 +100,34 @@ class JobPositionController extends Controller
             return redirect()->back()->with('success', 'Oops!! something went wrong, please try again later !!');
         }
 
-        if (!is_null(request('monster'))) {
-            $monster_job_status = $commonController->sendToMonster($job->id);
+        if (!is_null(request('shine'))) {
+            dd($_REQUEST);
         }
-        dd($_REQUEST);
+
+
+        if (!is_null(request('monster'))) {
+            $monster_posted_jobs = new MonsterPostedJob();
+            $monster_posted_jobs->job_id = $job->id;
+            $monster_posted_jobs->industry_id = request('monster_industry_id');
+            $monster_posted_jobs->category_function_id = request('monster_category_function_id');
+            $monster_posted_jobs->category_role_id = request('monster_category_role_id');
+            $monster_posted_jobs->monster_education_level_id = request('monster_education_level_id');
+            $monster_posted_jobs->monster_education_stream_id = request('monster_education_stream_id');
+            $monster_posted_jobs->monster_location_id = request('monster_location_id');
+            $monster_posted_jobs->is_sent = 0;
+            $monster_posted_jobs->expire_on = Carbon::parse(request('expire_on'))->format('Y-m-d');
+            $monster_posted_jobs->save();
+
+            $monster_job_status = $commonController->sendToMonster($monster_posted_jobs->id);
+        }
+        // dd($_REQUEST);
 
         if (!is_null(request('clickindia'))) {
+            $job_to_click_india = new JobToClickIndia();
+            $job_to_click_india->job_id = $job->id;
+            $job_to_click_india->is_posted = 0;
+            $job_to_click_india->save();
+
             $click_india_job_status = $commonController->sendToClickIndia($job->id);
         }
 

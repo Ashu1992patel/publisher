@@ -24,9 +24,11 @@ Route::get('job/format/', 'CommonController@jobformat');
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('social-group', 'SocialPostController');
-    Route::get('getIndustryCategoryFunction', 'MonsterController@getIndustryCategoryFunction');
-    Route::get('getCategoryRole', 'MonsterController@getCategoryRole');
-    Route::get('getMonsterEducationStream', 'MonsterController@getMonsterEducationStream');
+    Route::get('getIndustryCategoryFunction', 'MonsterController@getIndustryCategoryFunction'); //  Monster
+    Route::get('getCategoryRole', 'MonsterController@getCategoryRole'); //  Monster
+    Route::get('getMonsterEducationStream', 'MonsterController@getMonsterEducationStream'); //  Monster
+    Route::get('getShineCity', 'ShineController@getShineCity'); //  Shine
+    Route::get('getShineEducationStream', 'ShineController@getShineEducationStream'); //  Shine
     Route::resource('position', 'JobPositionController');
     Route::get('position/{id}', 'JobPositionController@show');
     Route::get('/home', 'HomeController@index')->name('home');
