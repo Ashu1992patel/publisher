@@ -32,7 +32,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('position', 'JobPositionController');
     Route::get('position/{id}', 'JobPositionController@show');
     Route::get('/home', 'HomeController@index')->name('home');
-    Route::get('/clickindiaresponse', 'HomeController@clickindiaresponse')->name('clickindiaresponse');
     Route::get('redirect/{service}', 'HomeController@redirect')->name('redirect');
     Route::get('callback/{service}', 'HomeController@callback')->name('callback');
+
+    // clickindiaresponse tracking views
+    Route::get('clickindiaresponse', 'HomeController@clickindiaresponse')->name('clickindiaresponse');
 });
