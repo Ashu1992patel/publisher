@@ -20,6 +20,7 @@ use App\ShineIndustry;
 use App\ShineSalaryRange;
 use App\SocialCrendential;
 use Carbon\Carbon;
+use DOMDocument;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
@@ -61,7 +62,7 @@ class JobPositionController extends Controller
         $shine_functional_areas = ShineFunctionalArea::cursor();
 
 
-        return view('backend.jobs.job_post', compact('clickIndiaCity', 'clickIndiaJobCategory', 'companies', 'monster_industries', 'monster_categoryfuntion', 'monster_locations', 'monster_education_levels', 'shine_cities_groups', 'shine_industries', 'shine_experience_lookups', 'shine_salary_ranges', 'study_field_groupings', 'shine_functional_areas',));
+        return view('backend.jobs.job_post', compact('clickIndiaCity', 'clickIndiaJobCategory', 'companies', 'monster_industries', 'monster_categoryfuntion', 'monster_locations', 'monster_education_levels', 'shine_cities_groups', 'shine_industries', 'shine_experience_lookups', 'shine_salary_ranges', 'study_field_groupings', 'shine_functional_areas'));
     }
 
     /**
@@ -100,8 +101,8 @@ class JobPositionController extends Controller
             return redirect()->back()->with('success', 'Oops!! something went wrong, please try again later !!');
         }
 
+
         if (!is_null(request('shine'))) {
-            dd($_REQUEST);
         }
 
 
@@ -109,8 +110,8 @@ class JobPositionController extends Controller
             $monster_posted_jobs = new MonsterPostedJob();
             $monster_posted_jobs->job_id = $job->id;
             $monster_posted_jobs->industry_id = request('monster_industry_id');
-            $monster_posted_jobs->category_function_id = request('monster_category_function_id');
-            $monster_posted_jobs->category_role_id = request('monster_category_role_id');
+            $monster_posted_jobs->category_function_id = request('category_function_id');
+            $monster_posted_jobs->category_role_id = request('category_role_id');
             $monster_posted_jobs->monster_education_level_id = request('monster_education_level_id');
             $monster_posted_jobs->monster_education_stream_id = request('monster_education_stream_id');
             $monster_posted_jobs->monster_location_id = request('monster_location_id');
@@ -118,9 +119,9 @@ class JobPositionController extends Controller
             $monster_posted_jobs->expire_on = Carbon::parse(request('expire_on'))->format('Y-m-d');
             $monster_posted_jobs->save();
 
-            $monster_job_status = $commonController->sendToMonster($monster_posted_jobs->id);
+            dd($_REQUEST);
+            $monster_job_status = $commonController->sendToMonster($job->id);
         }
-        // dd($_REQUEST);
 
         if (!is_null(request('clickindia'))) {
             $job_to_click_india = new JobToClickIndia();
@@ -220,6 +221,17 @@ class JobPositionController extends Controller
         session()->put('job', $job);
 
         $commonController  = new CommonController();
+
+        $xml = new DOMDocument();
+        $xml_album = $xml->createElement("Album");
+        $xml_track = $xml->createElement("Track");
+        $xml_album->appendChild($xml_track);
+        $xml->appendChild($xml_album);
+
+        $xml->save("/tmp/test.xml");
+        dd($xml);
+        
+        $monster_job_status = $commonController->sendToMonster($job->id);
         $click_india_job_status = $commonController->sendToClickIndia($job->id);
 
         if (!is_null($job->click_india_city_name)) {

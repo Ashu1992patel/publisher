@@ -12,8 +12,11 @@ class Job extends Model
     {
         return $this->belongsTo('App\Company', 'company_id');
     }
+
     public function click_india_city()
     {
         return $this->belongsTo('App\ClickIndiaCity', 'click_india_city_id');
     }
+
+    
 }

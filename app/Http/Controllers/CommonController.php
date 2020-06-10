@@ -17,6 +17,7 @@ class CommonController extends Controller
 {
     public function storeJobs()
     {
+        // dd($_REQUEST);
         $job = new Job();
         $job->job_title = request('job_title');
         $job->designation = request('designation');
@@ -37,10 +38,10 @@ class CommonController extends Controller
         $job->skills = request('skills');
         $job->company_description = request('company_description');
 
-        $job->monster_minimum_experience = request('minimum_experience');
-        $job->monster_maximum_experience = request('maximum_experience');
-        $job->monster_show_company_name = request('show_company_name');
-        $job->monster_show_contact_details = request('show_contact_details');
+        // $job->monster_minimum_experience = request('minimum_experience');
+        // $job->monster_maximum_experience = request('maximum_experience');
+        // $job->monster_show_company_name = request('show_company_name');
+        // $job->monster_show_contact_details = request('show_contact_details');
         $job->contact_person_name = request('contact_person_name');
         $job->person_contact = request('person_contact');
         $job->person_email = request('person_email');
@@ -173,20 +174,31 @@ class CommonController extends Controller
             ]);
             // 'job_city' => $job->click_india_city->city_name,
 
-            // dd($response);
+            // dump($response);
+
+            // dd(file_get_contents('https://www.clickindia.com/cron/jobs_business_api.php'));
 
 
-            if ($response->getBody()) {
+            $clickindia_status = $response->getBody();
+
+            if ($clickindia_status) {
                 $job_to_click_indias = JobToClickIndia::where('job_id', $job->id)->first();
+                // dd(file_get_contents('https://www.clickindia.com/cron/jobs_business_api.php'));
                 if (!isset($job_to_click_indias)) {
-                    // $job_to_click_indias = new JobToClickIndia();
+                    // dd('Nahi Mila');
+                    $job_to_click_indias = new JobToClickIndia();
                     $job_to_click_indias->job_id = $job->id;
-                    $job_to_click_indias->response = $job_to_click_indias;
+                    $job_to_click_indias->response = file_get_contents('https://www.clickindia.com/cron/jobs_business_api.php');
                     $job_to_click_indias->is_posted = 1;
                     $job_to_click_indias->save();
                     // update_count
+                } else {
+                    $job_to_click_indias->response = trim(file_get_contents('https://www.clickindia.com/cron/jobs_business_api.php'));
+                    $job_to_click_indias->is_posted = 1;
+                    $job_to_click_indias->save();
                 }
 
+                // dump($clickindia_status);
                 dump('Job Has Been Posted to Click India');
                 return 1;
             } else {
@@ -198,18 +210,15 @@ class CommonController extends Controller
         }
     }
 
-    public function sendToMonster($monster_posted_id)
+    public function sendToMonster($job_id)
     {
         // dd($_REQUEST);
-        $monster_posted_job = MonsterPostedJob::find($monster_posted_id);
-        $job = Job::find($monster_posted_job->job_id);
-
+        $monster_posted_job = MonsterPostedJob::where('job_id', $job_id)->first();
+        $job = Job::find($job_id);
         // $category_role_id = "734"
         // $monster_education_level_id =  "8"
 
         // dd($job);
-
-
 
         $client = new Client();
         $xml = '<?xml version="1.0" encoding="UTF-8" ?>';

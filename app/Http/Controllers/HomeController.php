@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Job;
 use App\JobPosition;
+use App\JobToClickIndia;
 use App\SocialCrendential;
 use Exception;
 use Illuminate\Http\Request;
@@ -35,6 +36,33 @@ class HomeController extends Controller
         $jobs = Job::orderBy('id', 'desc')->cursor();
         return view('backend.dashboard', compact('jobPositions', 'jobs'));
         return view('home');
+    }
+
+    public function clickindiaresponse()
+    {
+        // return (file_get_contents('https://www.clickindia.com/cron/ad_response_json.php'));
+
+        try {
+            $responses_json = file_get_contents('https://www.clickindia.com/cron/ad_response_json.php');
+
+            $responses = (json_decode($responses_json));
+
+            foreach ($responses as $key => $value) {
+                // dd($value);
+                if (is_numeric($value->job_id)) {
+                    $job_to_clickindia = JobToClickIndia::where('job_id', $value->job_id)->first();
+                    // dd($job_to_clickindia);
+                    if (isset($job_to_clickindia)) {
+                        $job_to_clickindia->views = $value->ad_views;
+                        $job_to_clickindia->response = $value->ad_id;
+                        $job_to_clickindia->save();
+                    }
+                }
+            }
+            return redirect()->back()->with('Synchronization successfull !!');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('Synchronization failed, Please Try again later !!');
+        }
     }
 
 
