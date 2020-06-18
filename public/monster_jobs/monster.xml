@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JobPositionPostings xmlns="http://monsterindia.com/schema/Monster/JobPost">
+    <JobFeedVersion version="4" />
+    <CompanyReference CorpId="428003">
+        <Company><![CDATA[White Force]]></Company>
+        <Username><![CDATA[xftwhite032inxftp]]></Username>
+        <Password><![CDATA[Wisdom34]]></Password>
+    </CompanyReference>
+    <Jobs>
+        <Job Language="EN" JobRefId="65" Moderate="1" JobAction="addOrUpdate" Country="IN">
+            <JobType><![CDATA[Full Time]]></JobType>
+            <JobInformation>
+                <JobTitle>
+                    <![CDATA[Trainee at Pashamylaram]]>
+                </JobTitle>
+                <ContractDetails>
+                    <EarlyJoiningDate><![CDATA[10/06/2020]]></EarlyJoiningDate>
+                    <BilingRate><![CDATA[Per Month]]></BilingRate>
+                </ContractDetails>
+                <Locations>
+                    <Location><![CDATA[2]]></Location>
+                </Locations>
+                <Industries>
+                    <Industry><![CDATA[14]]></Industry>
+                </Industries>
+                <Categories>
+                    <Category><![CDATA[18]]></Category>
+                </Categories>
+                <Roles>
+                    <Role><![CDATA[54]]></Role>
+                </Roles>
+                <WorkExperience>
+                    <MinimumYear><![CDATA[0]]></MinimumYear>
+                    <MaximumYear><![CDATA[2]]></MaximumYear>
+                </WorkExperience>
+                <KeySkills>
+                    <![CDATA['Able to Read Write & Speak basic English']]>
+                </KeySkills>
+                <JobSummary>
+                    <![CDATA[<p>Ensuring work areas are kept clean, neat and well-organized. Packing incoming stock away, taking inventory and reporting shortages. Keeping records of incoming and outgoing shipments. Picking orders as requested by management.</p>]]>
+                </JobSummary>
+                <JobDescription>
+                    <![CDATA[<p>Ensuring work areas are kept clean, neat and well-organized. Packing incoming stock away, taking inventory and reporting shortages. Keeping records of incoming and outgoing shipments. Picking orders as requested by management. Sealing and tagging containers, confirming accuracy of orders and signing pick tickets to confirm. Ensuring correct shipping information is attached and moving completed orders to shipping area. Placing containers on pallets, and securing with stretch wrap, shrink wrap and strapping. Loading and unloading trucks by using totes, jacks and forklifts Pack, weigh, and label completed items for shipment or storage. Follow all company guidelines regarding packaging. Identify and dispose of defective items. Properly use packaging materials, including hand tools, glues, nails, padding, etc. Keep complete records of all materials that go through the warehouse. Maintain a clean work area.</p>]]>
+                </JobDescription>
+                <Education>
+                    <Level><![CDATA[15]]></Level>
+                    <Stream><![CDATA[5]]></Stream>
+                </Education>
+                <Salary>
+                    <Currency monsterId="1"><![CDATA[INR]]></Currency>
+                    <MinimumSalary><![CDATA[1300]]></MinimumSalary>
+                    <MaximumSalary><![CDATA[1300]]></MaximumSalary>
+                </Salary>
+                <AboutCompany><![CDATA[As a supply chain management & warehousing specialist and end to end supply chain specialist we offer more than just the ability to support your business operations with a well-planned and sophisticated cohesive package of end to end supply chain solutions. Head Quartered in Chennai, India, ProConnect operates PAN India with a growing Network of over 165 warehouses of 6 Mn Sq.ft . As a neutral Service provider, we offer a full range of 3PL services to Clients covering all verticals including new age businesses and mission critical support. We also offer the State of the art Warehouse Management System (WMS) with Online Communication links which can be integrated with any ERP to meet today's fast paced businesses.
+                We currently deliver to more than 36,000 customer locations with an effective nationwide network and provide End to End supply chain solutions to over 150 leading brands.]]>
+                </AboutCompany>
+            </JobInformation>
+            <Contact showContactDetails="true" hideCompanyName="true">
+                <Name><![CDATA[Mili]]></Name>
+                <Phone><![CDATA[6264800152]]></Phone>
+                <Email><![CDATA[mili@white-force.com]]></Email>
+            </Contact>
+            <ApplyOnlineURL><![CDATA[http://white-force.com/jobs-temp-description/33]]></ApplyOnlineURL>
+        </Job>
+    </Jobs>
+</JobPositionPostings>

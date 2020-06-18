@@ -12,6 +12,7 @@ use App\MonsterEducationLevel;
 use App\MonsterIndustryCategoryMapping;
 use App\MonsterLocation;
 use App\MonsterPostedJob;
+use App\Shine;
 use App\ShineCity;
 use App\ShineDegreeLevel;
 use App\ShineExperienceLookup;
@@ -55,12 +56,11 @@ class JobPositionController extends Controller
         $shine_cities_groups = $shine_cities_collection->unique('city_grouping_desc');
         $shine_industries = ShineIndustry::orderBy('industry_desc')->cursor();
         $shine_experience_lookups = ShineExperienceLookup::cursor();
-        $shine_salary_ranges = ShineSalaryRange::cursor();
+        $shine_salary_ranges = ShineSalaryRange::orderBy('salary_id')->cursor();
 
         $shine_degree_levels_collection = new Collection(ShineDegreeLevel::orderBy('study_field_grouping_id')->cursor());
         $study_field_groupings = $shine_degree_levels_collection->unique('study_field_grouping_id');
         $shine_functional_areas = ShineFunctionalArea::cursor();
-
 
         return view('backend.jobs.job_post', compact('clickIndiaCity', 'clickIndiaJobCategory', 'companies', 'monster_industries', 'monster_categoryfuntion', 'monster_locations', 'monster_education_levels', 'shine_cities_groups', 'shine_industries', 'shine_experience_lookups', 'shine_salary_ranges', 'study_field_groupings', 'shine_functional_areas'));
     }
@@ -83,17 +83,8 @@ class JobPositionController extends Controller
      */
     public function store(Request $request)
     {
-        // $eduQualification = '';
-        // foreach ($request->eduQualification as $key => $value) {
+        // dd($_REQUEST);
 
-        //     if (++$key == $request->eduQualification)
-        //         $eduQualification .= $value;
-        //     else
-        //         $eduQualification .= $value . ', ';
-        // }
-
-
-        // dd(json_encode(request('click_india_working_days')));
         $commonController = new CommonController();
 
         $job = $commonController->storeJobs();
@@ -101,11 +92,29 @@ class JobPositionController extends Controller
             return redirect()->back()->with('success', 'Oops!! something went wrong, please try again later !!');
         }
 
+        dump($job);
 
+        // Shine India Job Posting Starts Here......
         if (!is_null(request('shine'))) {
+            $shine = new Shine();
+            $shine->job_id = $job->id;
+            $shine->city_grouping_id = $request->shine_cities_groups_id;
+            $shine->city_id = $request->shine_cities_id;
+            $shine->industry_id = $request->shine_industries_id;
+            $shine->experience_lookup_id = $request->shine_experience_lookups_id;
+            $shine->salary_id = $request->shine_salary_range_id;
+            $shine->study_field_grouping_id = $request->shine_study_field_grouping_id;
+            $shine->study_id = $request->shine_study_id;
+            $shine->functional_area_id = $request->shine_functional_areas_id;
+            $shine->is_sent = 0;
+            $shine->save();
+
+            $shine_job_status = $commonController->sendToShine($job->id);
+            dd($shine_job_status);
         }
+        // Shine India Job Posting Ends Here......
 
-
+        // Monster India Job Posting Starts Here......
         if (!is_null(request('monster'))) {
             $monster_posted_jobs = new MonsterPostedJob();
             $monster_posted_jobs->job_id = $job->id;
@@ -119,10 +128,13 @@ class JobPositionController extends Controller
             $monster_posted_jobs->expire_on = Carbon::parse(request('expire_on'))->format('Y-m-d');
             $monster_posted_jobs->save();
 
-            dd($_REQUEST);
             $monster_job_status = $commonController->sendToMonster($job->id);
+            dd($monster_job_status);
         }
+        return ($_REQUEST);
+        // Monster India Job Posting Ends Here......
 
+        // Click India Job Posting Starts Here......
         if (!is_null(request('clickindia'))) {
             $job_to_click_india = new JobToClickIndia();
             $job_to_click_india->job_id = $job->id;
@@ -131,7 +143,9 @@ class JobPositionController extends Controller
 
             $click_india_job_status = $commonController->sendToClickIndia($job->id);
         }
+        // Click India Job Posting Ends Here......
 
+        // LinkedIn Job Posting Starts Here......
         if (!is_null(request('linkedin'))) {
             if (!is_null($job->click_india_city_name)) {
                 $message = '
@@ -173,12 +187,6 @@ class JobPositionController extends Controller
                 Company URL: ' . $job->company_url;
             }
 
-            // if (!is_null(request('click_india_city_name'))) {
-            //     $message = 'Company Name: ' . $job->company->name . 'City: ' . $job->click_india_city_name . 'Position Name: ' . $job->designation . 'Job Expire Date: ' . $job->expire_on . 'openings: ' . $job->vacancies . 'Company Location: ' . $job->company_location . 'Required Skills: ' . $job->skills . 'Job Description: ' . $job->job_description . 'Min Experience: ' . $job->click_india_minimum_experience . 'Qualification: ' . $job->click_india_minimum_qualification . 'Min Salary: ' . $job->minimum_salary . 'Max Salary: ' . $job->maximum_salary . 'Job Type: ' . $job->job_type;
-            // } else {
-            //     $message = 'Company Name: ' . $job->company->name . 'City: ' . $job->click_india_city->city_name . 'Position Name: ' . $job->designation . 'Job Expire Date: ' . $job->expire_on . 'openings: ' . $job->vacancies . 'Company Location: ' . $job->company_location . 'Required Skills: ' . $job->skills . 'Job Description: ' . $job->job_description . 'Min Experience: ' . $job->click_india_minimum_experience . 'Qualification: ' . $job->click_india_minimum_qualification . 'Min Salary: ' . $job->minimum_salary . 'Max Salary: ' . $job->maximum_salary . 'Job Type: ' . $job->job_type;
-            // }
-
             $SocialCrendential = SocialCrendential::where('social_plateform_name', 'linkedin')->first();
 
             try {
@@ -202,6 +210,7 @@ class JobPositionController extends Controller
                 echo $e->getMessage();
             }
         }
+        // LinkedIn Job Posting Ends Here......
 
         return redirect()->back()->with('success', 'Job position has been saved & posted to linkedin successfully !!');
     }
@@ -222,16 +231,16 @@ class JobPositionController extends Controller
 
         $commonController  = new CommonController();
 
-        $xml = new DOMDocument();
-        $xml_album = $xml->createElement("Album");
-        $xml_track = $xml->createElement("Track");
-        $xml_album->appendChild($xml_track);
-        $xml->appendChild($xml_album);
+        // $xml = new DOMDocument();
+        // $xml_album = $xml->createElement("Album");
+        // $xml_track = $xml->createElement("Track");
+        // $xml_album->appendChild($xml_track);
+        // $xml->appendChild($xml_album);
 
-        $xml->save("/tmp/test.xml");
-        dd($xml);
-        
-        $monster_job_status = $commonController->sendToMonster($job->id);
+        // $xml->save("/tmp/test.xml");
+        // dd($xml);
+
+        // $monster_job_status = $commonController->sendToMonster($job->id);
         $click_india_job_status = $commonController->sendToClickIndia($job->id);
 
         if (!is_null($job->click_india_city_name)) {

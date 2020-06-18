@@ -24,6 +24,7 @@ class CreateMonsterPostedJobsTable extends Migration
             $table->integer('monster_location_id')->nullable();
             $table->integer('monster_location_id')->nullable();
             $table->integer('is_sent')->nullable();
+            $table->longText('filepath')->nullable();
             $table->tinyInteger('is_active')->nullable();
             $table->date('expire_on')->nullable();
             $table->timestamps();

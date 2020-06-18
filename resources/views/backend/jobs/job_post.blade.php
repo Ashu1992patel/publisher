@@ -361,7 +361,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="pay">City Group <small>(shine)</small></label>
-                                            <select name="shine_cities_groups_id" class="list-dt form-control" id="shine_cities_groups_id" onchange="getShineCity(this.value);">
+                                            <select name="shine_cities_groups_id" class="list-dt form-control js-example-basic-single" id="shine_cities_groups_id" onchange="getShineCity(this.value);">
                                                 <option value="0">-Select City Group-</option>
                                                 @if(count($shine_cities_groups))
                                                 @foreach($shine_cities_groups as $shine_cities_group)
@@ -377,7 +377,7 @@
                                     <div class="col-sm-4" id="shine_cities_id_div">
                                         <div class="form-group">
                                             <label class="pay">City Name<small>(shine)</small></label>
-                                            <select name="shine_cities_id" class="list-dt form-control" id="shine_cities_id">
+                                            <select name="shine_cities_id" class="list-dt form-control js-example-basic-single" id="shine_cities_id">
                                                 <option value="0">-Select City Name-</option>
                                             </select>
                                         </div>
@@ -386,7 +386,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="pay">Industry <small>(shine)</small></label>
-                                            <select name="shine_industries_id" class="list-dt form-control" id="shine_industries_id">
+                                            <select name="shine_industries_id" class="list-dt form-control js-example-basic-single" id="shine_industries_id">
                                                 <option value="0">-Select Industry-</option>
                                                 @if(count($shine_industries))
                                                 @foreach($shine_industries as $shine_industry)
@@ -405,7 +405,7 @@
                                             <label class="pay">
                                                 Education Levels <small>(shine)</small>
                                             </label>
-                                            <select name="shine_study_field_grouping_id" class="list-dt form-control" id="shine_study_field_grouping_id" onchange="getShineEducationStream(this.value);">
+                                            <select name="shine_study_field_grouping_id" class="list-dt form-control js-example-basic-single" id="shine_study_field_grouping_id" onchange="getShineEducationStream(this.value);">
                                                 <option value="0">-Select Education Level-</option>
                                                 @if(count($study_field_groupings))
                                                 @foreach($study_field_groupings as $study_field_group)
@@ -421,7 +421,7 @@
                                     <div class="col-sm-4" id="shine_education_stream_div">
                                         <div class="form-group">
                                             <label class="pay">Education Stream <small>(shine)</small></label>
-                                            <select name="shine_study_id" class="list-dt form-control" id="shine_study_id">
+                                            <select name="shine_study_id" class="list-dt form-control js-example-basic-single" id="shine_study_id">
                                                 <option value="0">-Select Education Stream-</option>
                                             </select>
                                         </div>
@@ -430,7 +430,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="pay">Functional Area <small>(shine)</small></label>
-                                            <select name="shine_functional_areas_id" class="list-dt form-control" id="shine_functional_areas_id">
+                                            <select name="shine_functional_areas_id" class="list-dt form-control js-example-basic-single" id="shine_functional_areas_id">
                                                 <option value="0">-Select Functional Area-</option>
                                                 @if(count($shine_functional_areas))
                                                 @foreach($shine_functional_areas as $shine_functional_area)
@@ -446,12 +446,28 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="pay">Experience Look up <small>(shine)</small></label>
-                                            <select name="shine_experience_lookups_id" class="list-dt form-control" id="shine_experience_lookups_id">
+                                            <select name="shine_experience_lookups_id" class="list-dt form-control js-example-basic-single" id="shine_experience_lookups_id">
                                                 <option value="0">-Select Functional Area-</option>
                                                 @if(count($shine_experience_lookups))
                                                 @foreach($shine_experience_lookups as $shine_experience_lookup)
                                                 <option value="{{ $shine_functional_area->id }}">
                                                     {{ isset($shine_experience_lookup->display)?$shine_experience_lookup->display:'' }}
+                                                </option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="pay">Salary Range <small>(shine)</small></label>
+                                            <select name="shine_salary_range_id" class="list-dt form-control js-example-basic-single" id="shine_salary_range_id">
+                                                <option value="0">-Select Salary Range-</option>
+                                                @if(count($shine_salary_ranges))
+                                                @foreach($shine_salary_ranges as $shine_salary_range)
+                                                <option value="{{ $shine_salary_range->salary_id }}">
+                                                    {{ isset($shine_salary_range->text_value_hr)?$shine_salary_range->text_value_hr:'' }}
                                                 </option>
                                                 @endforeach
                                                 @endif

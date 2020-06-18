@@ -46,6 +46,167 @@
         background-color: #3e8e41;
     }
 </style>
+<!-- <link rel="stylesheet" href="http://thetheme.io/thejobs/assets/css/app.min.css"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/10.8.1/build.css" />
+
+<style>
+    .Box {
+        width: 400px;
+    }
+
+    /* Basic Layout Stuff */
+
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        font-family: helvetica, arial;
+        color: #555E63;
+        line-height: 1.4;
+    }
+
+    .wrap {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row-reverse;
+        min-height: 100%;
+    }
+
+    .posts {
+        /* width: calc(100% - 280px); */
+    }
+
+    /* Post Listings */
+
+    h1 {
+        margin: 40px 40px 10px 40px;
+        padding-bottom: 15px;
+        font-size: 16px;
+        color: #DC366E;
+        border-bottom: 1px solid #D7D9DA;
+        line-height: 1;
+    }
+
+    .post {
+        display: block;
+        text-decoration: none;
+        color: #555E63;
+        border-left: 10px solid #C0F20C;
+        /* green */
+        padding: 30px 40px 30px 30px;
+        margin-bottom: 10px;
+    }
+
+    .post h2 {
+        color: #283866;
+        margin: 0 0 15px 0;
+        line-height: 1;
+        transition: color 400ms ease-in-out;
+    }
+
+    .date {
+        font-size: 12px;
+        color: #aaa;
+        margin: 0;
+        line-height: 1;
+        transition: all 400ms ease-in-out;
+    }
+
+    .summary {
+        margin: 20px 0 0 0;
+    }
+
+    .post.cyan {
+        border-color: #0CEAF2;
+    }
+
+    .post.blue {
+        border-color: #00A1FF;
+    }
+
+    .post.pink {
+        border-color: #DC366E;
+    }
+
+    .post.blue2 {
+        border-color: #1377BF;
+    }
+
+
+
+
+
+    /* Sidebar Links */
+
+
+
+
+
+
+
+    /* Hover */
+
+    .post {
+        position: relative;
+        overflow: hidden;
+        transition: color 400ms ease-in-out;
+    }
+
+    .post:before {
+        content: "";
+        width: 10px;
+        height: 100%;
+        background: #C0F20C;
+        border-top-right-radius: 50%;
+        border-bottom-right-radius: 50%;
+        position: absolute;
+        transition: all 400ms ease-in-out;
+    }
+
+    .post-inner {
+        position: relative;
+        z-index: 99999;
+    }
+
+    .post:before {
+        top: 0;
+        left: -10px;
+    }
+
+    .post:hover,
+    .post:hover h2 {
+        color: #ffffff;
+    }
+
+    .post:hover .date {
+        color: #ffffff;
+        opacity: 0.5;
+    }
+
+    .post:hover:before {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        left: 0;
+    }
+
+    .post.cyan:before {
+        background: #0CEAF2;
+    }
+
+    .post.blue:before {
+        background: #00A1FF;
+    }
+
+    .post.pink:before {
+        background: #DC366E;
+    }
+
+    .post.blue2:before {
+        background: #1377BF;
+    }
+</style>
+
 <div class="page-body">
 
     <!-- Container-fluid starts-->
@@ -164,72 +325,120 @@
                             </a>
                         </h5>
                         <div class="card-header-right">
-                            <ul class="list-unstyled card-option">
+                            <div class="float-right">
+                                {{ $jobs->links() }}
+                            </div>
+                            <!-- <ul class="list-unstyled card-option">
                                 <li><i class="icofont icofont-simple-left"></i></li>
                                 <li><i class="view-html fa fa-code"></i></li>
                                 <li><i class="icofont icofont-maximize full-card"></i></li>
                                 <li><i class="icofont icofont-minus minimize-card"></i></li>
                                 <li><i class="icofont icofont-refresh reload-card"></i></li>
                                 <li><i class="icofont icofont-error close-card"></i></li>
-                            </ul>
+                            </ul> -->
                         </div>
                     </div>
 
 
 
 
+
                     @if(count($jobs))
-                    @foreach($jobs as $key=>$jobPosition)
+
                     <div class="row">
-                        <div class="col-sm-1">
-                            <div class="card order-graph sales-carousel">
-                                <div class="card-body card order-graph sales-carousel">
-                                    <label for="">
-                                        {{ ++$key }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-11">
-                            <div class="card order-graph sales-carousel">
-                                <div class="card-body card order-graph sales-carousel">
-                                    <div class="media">
-                                        <div class="media-body">
-                                            <span>
-                                                {{ isset($jobPosition->company->name)?$jobPosition->company->name:'' }}
-                                            </span>
 
-                                            @if(isset($jobPosition->click_india_city->city_name))
-                                            <small>
-                                                ({{ $jobPosition->click_india_city->city_name }})
-                                            </small>
-                                            @endif
+                        <div class="col-sm-12">
+                            <div class="wrap">
 
-                                            <br>
-                                            <small class="font-bold smallClass badge badge-sm badge-success">
-                                                Exp. : {{ isset($jobPosition->click_india_minimum_experience)?$jobPosition->click_india_minimum_experience:'' }}
-                                            </small>
-                                            <small class="font-bold smallClass badge badge-sm badge-info">
-                                                Opening : {{ isset($jobPosition->vacancies)?$jobPosition->vacancies:'' }}
-                                            </small>
-                                            <small class="font-bold smallClass badge badge-sm badge-warning">
-                                                Salary : {{ isset($jobPosition->minimum_salary)?$jobPosition->minimum_salary:'' }} -
-                                                {{ isset($jobPosition->maximum_salary)?$jobPosition->maximum_salary:'' }}
-                                            </small>
-                                            <small class="font-bold smallClass badge badge-sm badge-danger">
-                                                Expires On : {{ Carbon\Carbon::parse($jobPosition->expire_on)->format('d-M-Y') }}
-                                            </small>
-                                            <small class="font-bold smallClass badge badge-sm badge-info">
-                                                Skills: {{ isset($jobPosition->skills)?$jobPosition->skills:'' }}
-                                            </small>
+                                <main class="posts">
 
-                                            <h2 class="mb-0">
-                                                <a href="{{ isset($jobPosition->apply_button_url)?$jobPosition->apply_button_url:'' }}" target="_blank">
-                                                    {{ isset($jobPosition->job_title)?$jobPosition->job_title:'' }}
-                                                </a>
-                                                <!-- {{ isset($jobPosition->job_title)?$jobPosition->job_title:'' }} -->
+                                    <!-- <h1>Earlier Job Positions</h1> -->
+                                    @php
+                                    $color = ['', 'cyan', 'blue', 'pink', 'blue2'];
+                                    $index = 0;
+                                    @endphp
+
+                                    @foreach($jobs as $key => $jobPosition)
+                                    @php
+                                    if($index > 4)
+                                    {
+                                    $index = 0;
+                                    }
+                                    @endphp
+                                    <div class="post {{ $color[$index] }}">
+                                        <div class="post-inner">
+                                            <h2>
+                                                {{ isset($jobPosition->job_title)?$jobPosition->job_title:'' }}
+
+                                                @if(isset($jobPosition->company->name))
+                                                <small style="font-size: 12px;" style='color: red !important;'>
+                                                    BY
+                                                </small>
+                                                @php
+                                                $url = url('companiess/'.$jobPosition->company_id);
+                                                @endphp
+                                                <button title='Click to check "{{ isset($jobPosition->company->name)?$jobPosition->company->name:'' }}" company details. ' onclick='location.href = "{{ $url }}"' style="background:none;background:none;border:none;margin:0;padding:0;cursor: pointer;">
+                                                    {{ isset($jobPosition->company->name)?$jobPosition->company->name:'' }}
+                                                </button>
+                                                @endif
+
+                                                <div class="bg-primary b-r-8 float-right" style="font-size: 12px;">
+                                                    <div class="dropdown feather feather-briefcase">
+                                                        <button class="dropbtn btn-sm">
+                                                            Action ({{ ++$key }})
+                                                            <i class="fa fa-caret-down"></i>
+                                                        </button>
+                                                        <div class="dropdown-content">
+                                                            <a href="{{ url('position/').'/'.$jobPosition->id }}">
+                                                                Post Now
+                                                            </a>
+                                                            <a href="javascript: void(0);" onclick='getConfirmed("{{$jobPosition->job_title}}", "{{$jobPosition->id}}", "form{{$jobPosition->id}}");'>
+                                                                Delete
+                                                            </a>
+                                                            <form action="{{ url('position/').'/'.$jobPosition->id }}" method="post" id="form{{$jobPosition->id}}">
+                                                                @method('DELETE')
+                                                                @csrf
+                                                                <button type="submit" style="display: none;" class="btn btn-sm btn-warning hide">Delete</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </h2>
-                                            <p>
+                                            <p class="date">
+                                                <!-- <time datetime="2019-07-07">
+                                                    7th July 2019
+                                                </time>
+                                                by Dean -->
+                                                @if(isset($jobPosition->click_india_city->city_name))
+                                                <small class="font-bold smallClass badge badge-sm badge-info">
+                                                    {{ $jobPosition->click_india_city->city_name }}
+                                                </small>
+                                                @endif
+                                                <small class="font-bold smallClass badge badge-sm badge-success">
+                                                    Exp. : {{ isset($jobPosition->click_india_minimum_experience)?$jobPosition->click_india_minimum_experience:'' }}
+                                                </small>
+
+                                                <small class="font-bold smallClass badge badge-sm badge-info">
+                                                    Opening : {{ isset($jobPosition->vacancies)?$jobPosition->vacancies:'' }}
+                                                </small>
+                                                <small class="font-bold smallClass badge badge-sm badge-warning">
+                                                    Salary : {{ isset($jobPosition->minimum_salary)?$jobPosition->minimum_salary:'' }} -
+                                                    {{ isset($jobPosition->maximum_salary)?$jobPosition->maximum_salary:'' }}
+                                                </small>
+                                                <small class="font-bold smallClass badge badge-sm badge-danger">
+                                                    Expires On : {{ Carbon\Carbon::parse($jobPosition->expire_on)->format('d-M-Y') }}
+                                                </small>
+                                                <small class="font-bold smallClass badge badge-sm badge-info">
+                                                    Skills: {{ isset($jobPosition->skills)?$jobPosition->skills:'' }}
+                                                </small>
+                                                <small class="font-bold smallClass badge badge-sm badge-success">
+                                                    {{ isset($jobPosition->job_type)?'Job Type: '.$jobPosition->job_type:'' }}
+                                                </small>
+                                            </p>
+                                            <p class="summary" title="Job Summery">
+                                                {{ substr($jobPosition->job_description, 0, 144) }}
+                                            </p>
+                                            <p class="summary">
                                                 @php
                                                 $job_to_click_india = App\JobToClickIndia::where('job_id',$jobPosition->id)->first();
                                                 @endphp
@@ -256,55 +465,139 @@
                                                 <span>
                                                     <i class="fa fa-angle-up"></i>
                                                 </span>
-                                            </p>
-                                            <h5 class="f-w-600">
-                                                <small>
-                                                    {{ isset($jobPosition->job_type)?'Job Type: '.$jobPosition->job_type:'' }}
-                                                </small>
-                                            </h5>
-                                            <p style="text-overflow: ellipsis; overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;">
-                                                {{ isset($jobPosition->job_description)?$jobPosition->job_description:'' }}
-                                                <!-- {{ substr($jobPosition->job_description, 0, 200) }} -->
-                                            </p>
 
+                                            </p>
                                         </div>
-                                        <div class="bg-primary b-r-8">
-                                            <div class="dropdown feather feather-briefcase">
-                                                <button class="dropbtn btn-sm">Action
-                                                    <i class="fa fa-caret-down"></i>
-                                                </button>
-                                                <div class="dropdown-content">
-                                                    <a href="{{ url('position/').'/'.$jobPosition->id }}">
-                                                        Post Now
-                                                    </a>
+                                    </div>
+                                    @php ++$index; @endphp
+                                    @endforeach
+                                    {{ $jobs->links() }}
+                                </main>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="row">
+                        @foreach($jobs as $key=>$jobPosition)
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-1">
+                                    <div class="card order-graph sales-carousel">
+                                        <div class="card-body card order-graph sales-carousel">
+                                            <label for="">
+                                                {{ ++$key }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-11">
+                                    <div class="card order-graph sales-carousel">
+                                        <div class="card-body card order-graph sales-carousel">
+                                            <div class="media">
+                                                <div class="media-body">
+                                                    <span>
+                                                        {{ isset($jobPosition->company->name)?$jobPosition->company->name:'' }}
+                                                    </span>
 
-                                                    <a href="javascript: void(0);" onclick='getConfirmed("{{$jobPosition->job_title}}", "{{$jobPosition->id}}", "form{{$jobPosition->id}}");'>
-                                                        Delete
-                                                    </a>
+                                                    @if(isset($jobPosition->click_india_city->city_name))
+                                                    <small>
+                                                        ({{ $jobPosition->click_india_city->city_name }})
+                                                    </small>
+                                                    @endif
 
-                                                    <form action="{{ url('position/').'/'.$jobPosition->id }}" method="post" id="form{{$jobPosition->id}}">
-                                                        @method('DELETE')
-                                                        @csrf
-                                                        <button type="submit" style="display: none;" class="btn btn-sm btn-warning hide">Delete</button>
-                                                    </form>
+                                                    <br>
+                                                    <small class="font-bold smallClass badge badge-sm badge-success">
+                                                        Exp. : {{ isset($jobPosition->click_india_minimum_experience)?$jobPosition->click_india_minimum_experience:'' }}
+                                                    </small>
+                                                    <small class="font-bold smallClass badge badge-sm badge-info">
+                                                        Opening : {{ isset($jobPosition->vacancies)?$jobPosition->vacancies:'' }}
+                                                    </small>
+                                                    <small class="font-bold smallClass badge badge-sm badge-warning">
+                                                        Salary : {{ isset($jobPosition->minimum_salary)?$jobPosition->minimum_salary:'' }} -
+                                                        {{ isset($jobPosition->maximum_salary)?$jobPosition->maximum_salary:'' }}
+                                                    </small>
+                                                    <small class="font-bold smallClass badge badge-sm badge-danger">
+                                                        Expires On : {{ Carbon\Carbon::parse($jobPosition->expire_on)->format('d-M-Y') }}
+                                                    </small>
+                                                    <small class="font-bold smallClass badge badge-sm badge-info">
+                                                        Skills: {{ isset($jobPosition->skills)?$jobPosition->skills:'' }}
+                                                    </small>
+
+                                                    <h2 class="mb-0">
+                                                        <a href="{{ isset($jobPosition->apply_button_url)?$jobPosition->apply_button_url:'' }}" target="_blank" style="font-size: 20px;">
+                                                            {{ isset($jobPosition->job_title)?$jobPosition->job_title:'' }}
+                                                        </a>
+                                                    </h2>
+                                                    <p>
+                                                        @php
+                                                        $job_to_click_india = App\JobToClickIndia::where('job_id',$jobPosition->id)->first();
+                                                        @endphp
+
+                                                        @if(isset($job_to_click_india))
+                                                        <a href="https://www.clickindia.com/detail.php?id={{$job_to_click_india->response}}" target="_blank">
+                                                            Click India View:
+                                                        </a>
+                                                        <small class="badge badge-sm badge-info">
+                                                            {{ $job_to_click_india->views }}
+                                                        </small>
+                                                        <span>
+                                                            <i class="fa fa-angle-up"></i>
+                                                        </span>
+
+                                                        @endif
+
+                                                        Monster View: <small class="badge badge-sm badge-info">100</small>
+                                                        <span>
+                                                            <i class="fa fa-angle-up"></i>
+                                                        </span>
+
+                                                        Shine View: <small class="badge badge-sm badge-info">100</small>
+                                                        <span>
+                                                            <i class="fa fa-angle-up"></i>
+                                                        </span>
+                                                    </p>
+                                                    <h5 class="f-w-600">
+                                                        <small>
+                                                            {{ isset($jobPosition->job_type)?'Job Type: '.$jobPosition->job_type:'' }}
+                                                        </small>
+                                                    </h5>
+                                                    <p style="text-overflow: ellipsis; overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;">
+                                                        {{ isset($jobPosition->job_description)?$jobPosition->job_description:'' }}
+
+                                                    </p>
+
+                                                </div>
+                                                <div class="bg-primary b-r-8">
+                                                    <div class="dropdown feather feather-briefcase">
+                                                        <button class="dropbtn btn-sm">Action
+                                                            <i class="fa fa-caret-down"></i>
+                                                        </button>
+                                                        <div class="dropdown-content">
+                                                            <a href="{{ url('position/').'/'.$jobPosition->id }}">
+                                                                Post Now
+                                                            </a>
+
+                                                            <a href="javascript: void(0);" onclick='getConfirmed("{{$jobPosition->job_title}}", "{{$jobPosition->id}}", "form{{$jobPosition->id}}");'>
+                                                                Delete
+                                                            </a>
+
+                                                            <form action="{{ url('position/').'/'.$jobPosition->id }}" method="post" id="form{{$jobPosition->id}}">
+                                                                @method('DELETE')
+                                                                @csrf
+                                                                <button type="submit" style="display: none;" class="btn btn-sm btn-warning hide">Delete</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <!-- <div class="small-box">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-briefcase">
-                                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2">
-                                                    </rect>
-                                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16">
-                                                    </path>
-                                                </svg>
-                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        @endforeach
+
+                    </div> -->
                     <hr>
-                    @endforeach
                     @endif
 
                     <div class="card-body">

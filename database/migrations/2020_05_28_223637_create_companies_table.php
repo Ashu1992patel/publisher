@@ -19,6 +19,7 @@ class CreateCompaniesTable extends Migration
             $table->longText('image')->nullable();
             $table->string('website')->nullable();
             $table->longText('about')->nullable();
+            $table->string('address')->nullable();
             $table->integer('created_by')->nullable();
             $table->string('type')->nullable();
             $table->tinyInteger('is_active')->default(1);

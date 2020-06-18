@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::resource('companiess', 'CompanyController');
 Route::get('/', function () {
     return view('backend.login');
     return view('welcome');
@@ -38,3 +39,5 @@ Route::middleware(['auth'])->group(function () {
     // clickindiaresponse tracking views
     Route::get('clickindiaresponse', 'HomeController@clickindiaresponse')->name('clickindiaresponse');
 });
+
+Route::get('jsonjob', 'HomeController@jsonjob')->name('jsonjob');

@@ -39,3 +39,4 @@
 
 <!-- latest jquery-->
 <script src="{{ url('/') }}/assets/js/jquery-3.3.1.min.js"></script>
+

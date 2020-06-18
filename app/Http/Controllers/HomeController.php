@@ -12,6 +12,8 @@ use Laravel\Socialite\Facades\Socialite as FacadesSocialite;
 use Socialite;
 use Facebook;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -32,18 +34,51 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $jobPositions = JobPosition::orderBy('id', 'desc')->cursor();
-        $jobs = Job::orderBy('id', 'desc')->cursor();
-        return view('backend.dashboard', compact('jobPositions', 'jobs'));
-        return view('home');
+        // $jobPositions = JobPosition::orderBy('id', 'desc')->paginate(20);
+        $jobs = Cache::get('ashish', function () {
+            return Job::with(['company', 'click_india_city', 'job_to_clickindia'])->orderBy('id', 'desc')->paginate(10);
+        });
+
+
+        // $jobs = Job::with(['company', 'click_india_city', 'job_to_clickindia'])->orderBy('id', 'desc')->paginate(10)->job_to_clickindia;
+        return view('backend.dashboard', compact('jobs'));
+        // return view('backend.dashboard', compact('jobPositions', 'jobs'));
+        // return view('home');
     }
 
     public function clickindiaresponse()
     {
         try {
-            $responses_json = file_get_contents('https://www.clickindia.com/cron/ad_response_json.php');
+            // $responses_json = file_get_contents('https://www.clickindia.com/cron/ad_response_json.php');
+            /* API URL */
+
+            $url = 'https://www.clickindia.com/cron/ad_response_json.php';
+
+            /* Init cURL resource */
+            $ch = curl_init($url);
+
+            /* Array Parameter Data */
+            $data = ['name' => '1'];
+
+            /* pass encoded JSON string to the POST fields */
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
+            /* set the content type json */
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+
+            /* set return type json */
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            /* execute request */
+            $responses_json = curl_exec($ch);
+
+            // dd($responses_json);
+
+            /* close cURL resource */
+            curl_close($ch);
 
             $responses = (json_decode($responses_json));
+            // return ($responses);
 
             foreach ($responses as $key => $value) {
                 if (is_numeric($value->job_id)) {
@@ -55,13 +90,18 @@ class HomeController extends Controller
                     }
                 }
             }
-            return redirect()->back()->with('success','Synchronization successfull !!');
+            return redirect()->back()->with('success', 'Synchronization successfull !!');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('error','Synchronization failed, Please Try again later !!');
+            return redirect()->back()->with('error', 'Synchronization failed, please Try again later !!');
         }
     }
 
 
+
+    public function jsonjob()
+    {
+        dd($_REQUEST);
+    }
 
     public function sendLinkedInPost()
     {

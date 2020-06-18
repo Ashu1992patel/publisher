@@ -2,7 +2,7 @@
     <div class="main-header-left d-none d-lg-block">
         <div class="logo-wrapper">
             <a href="index.html">
-                <img class="blur-up lazyloaded" src="{{ url('/') }}/assets/images/dashboard/happiest-logo.png" alt="" style="height: 80px;">
+                <img class="blur-up lazyloaded" src="{{ url('/') }}/assets/images/dashboard/happiest-logo.png" alt="" style="max-height: 80px;max-width: 220px;">
                 <!-- <img class="blur-up lazyloaded" src="https://happiestresume.com/public/front/jobsearch/images/logo1.png" alt="" style="height: 80px;"> -->
             </a>
         </div>
@@ -20,6 +20,12 @@
                 <a class="sidebar-header" href="{{ url('home') }}">
                     <i data-feather="home"></i>
                     <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a class="sidebar-header" href="{{ url('/companiess') }}">
+                    <i data-feather="home"></i>
+                    <span>Companies</span>
                 </a>
             </li>
             <li>

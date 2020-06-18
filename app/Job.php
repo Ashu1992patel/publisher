@@ -18,5 +18,9 @@ class Job extends Model
         return $this->belongsTo('App\ClickIndiaCity', 'click_india_city_id');
     }
 
-    
+    public function job_to_clickindia()
+    {
+        return $this->hasMany('App\JobToClickIndia');
+        // return $this->hasMany(JobToClickIndia::where('job_id', $this->id)->get());
+    }
 }
